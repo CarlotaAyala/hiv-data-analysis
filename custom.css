@@ -1,0 +1,137 @@
+
+/* General Background and Text Styling */
+body {
+    background-color: #ffe6e6;  /* Lightest red pastel */
+    color: #660000;  /* Dark red for text to ensure good contrast */
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* Header / Navigation Bar Styling */
+.navbar {
+    background-color: #cc0000;  /* Stronger red for the top navigation bar */
+    border-color: #cc0000;
+    padding: 5px 10px; /* Reducir el padding general de la barra de navegación */
+}
+
+.navbar .navbar-brand,
+.navbar .navbar-nav > li > a {
+    color: white;  /* White for better readability */
+    font-weight: bold;
+    padding: 8px 10px; /* Reducir el padding horizontal */
+    font-size: 14px; /* Reducir ligeramente el tamaño de fuente */
+}
+
+.navbar .navbar-nav > li > a:hover {
+    color: #ff6666;  /* Softer red on hover */
+}
+
+/* Asegurar que las etiquetas de la barra de navegación estén en una sola línea */
+.navbar .navbar-nav {
+    display: flex;
+    flex-wrap: nowrap; /* Evitar que las etiquetas se dividan en varias líneas */
+    justify-content: space-around; /* Espaciado uniforme entre los elementos */
+    overflow-x: auto; /* Habilitar desplazamiento horizontal si es necesario */
+    white-space: nowrap; /* Prevenir el quiebre de texto */
+}
+
+/* Styling for Active Tab */
+.navbar .navbar-nav > li.active > a,
+.navbar .navbar-nav > li.active > a:focus,
+.navbar .navbar-nav > li.active > a:hover {
+    background-color: #990000;  /* Darker red for selected tab */
+    color: white;  /* White text for contrast */
+    border-radius: 4px; /* Adding slight rounding for a softer look */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    background-color: #ffebe6;  /* Light red pastel for sidebar */
+    color: black !important;  /* Forzar texto negro en la barra lateral */
+}
+
+.sidebar .selectize-control, .sidebar .form-control {
+    background-color: #ffe6e6;  /* Light red pastel para campos de entrada */
+    color: black !important;  /* Forzar texto negro en los campos de entrada */
+}
+
+.sidebar a {
+    color: black !important;  /* Forzar texto negro en los enlaces de la barra lateral */
+}
+
+.sidebar a:hover {
+    color: #cc0000 !important;  /* Cambiar a rojo en hover */
+}
+
+/* Buttons Styling */
+.btn {
+    background-color: #cc0000;  /* Strong red for buttons */
+    color: white;  /* White text for readability */
+    border: none;
+}
+
+.btn:hover {
+    background-color: #990000;  /* Darker red for button hover */
+    color: white;
+}
+
+/* Remove default blue outline on focus */
+.btn:focus,
+.navbar .navbar-nav > li > a:focus {
+    outline: none;
+    box-shadow: 0 0 4px #990000; /* Add a red shadow for focus */
+}
+
+/* Panels and Boxes Styling */
+.panel, .well {
+    background-color: #fff0f0;  /* Very light red pastel to match the body */
+    border-color: #ffcccc;  /* Light red for panel borders */
+}
+
+.panel-heading {
+    background-color: #ffcccc;  /* Soft red for panel headings */
+    color: white;  /* White text for contrast */
+}
+
+/* Main Content Styling */
+.main {
+    background-color: #fff0f0;  /* Very light red pastel for the main content area */
+    color: #993333;  /* Dark red for text to keep it gentle but readable */
+}
+
+/* Table Styling */
+table {
+    border-color: #ffcccc;  /* Light red for table borders */
+    color: #993333;  /* Dark red for table text */
+}
+
+th, td {
+    border: 1px solid #ffcccc;
+    padding: 8px;
+}
+
+/* Input Widgets Styling (e.g., Select Inputs, Text Inputs) */
+.selectize-control, .form-control {
+    background-color: #ffe6e6;  /* Light red pastel for input elements */
+    color: #993333;  /* Dark red for text */
+}
+
+/* Highlight Links */
+a {
+    color: #ff6666;  /* Softer red for links */
+}
+
+a:hover {
+    color: #ff3333;  /* Bright red for hover */
+    text-decoration: underline;
+}
+
+/* Leaflet Map Styling */
+.leaflet-container {
+    background: #fff0f0;  /* Very light red pastel for map background if tiles are missing */
+}
+
+.navbar .navbar-nav > li > a:hover {
+    color: #ffcccc;  /* Cambiar a un rojo claro en el hover */
+    background-color: #cc0000;  /* Fondo rojo al pasar el cursor */
+    text-decoration: none; /* Opcional: quitar subrayado */
+}

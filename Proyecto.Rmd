@@ -1,0 +1,1518 @@
+---
+title: "Impacto del VIH/SIDA en diferentes regiones del mundo"
+author: "Carlota Ayala Pérez"
+output: 
+  html_document: 
+    css: estilos.css
+date: "2024-12-08"
+---
+[Enlace directo al cuadro de mandos.](http://10.22.143.222:3838/sample-apps/a2507/ProyectoDashboard.Rmd)
+
+![Representación gráfica del VIH en el torrente sanguíneo](img1.png)
+
+***
+
+## **Estado actual y Objetivos**
+
+### **Estado actual**
+
+El Virus de la Inmunodeficiencia Humana (VIH) sigue siendo uno de los mayores desafíos de salud en el mundo, a pesar de los avances significativos en prevención, tratamiento y educación. Según datos recientes de organismos internacionales como [ONUSIDA](https://www.unaids.org/es), en 2022 más de 38 millones de personas vivían con VIH a nivel global, y aunque el número de nuevas infecciones anuales ha disminuido significativamente desde su pico en la década de los 2000, todavía se registran más de 1.5 millones de nuevas infecciones cada año. En este contexto, África subsahariana sigue siendo la región más afectada, representando aproximadamente dos tercios de todos los casos nuevos.
+
+Los programas de prevención, como el tratamiento antirretroviral (TAR) y la prevención de la transmisión maternoinfantil (PMTCT, por sus siglas en inglés), han desempeñado un papel crucial en la reducción de las tasas de mortalidad y nuevas infecciones. Sin embargo, persisten desafíos importantes, especialmente en países con sistemas de salud frágiles, donde el acceso a los medicamentos, la educación y la detección temprana sigue siendo limitado. Además, la estigmatización social y cultural del VIH continúa siendo una barrera significativa para que las personas busquen atención médica y apoyo.
+
+### **Motivación del proyecto**
+
+La motivación de este proyecto radica en la necesidad urgente de analizar y presentar datos epidemiológicos sobre el VIH para identificar tendencias, brechas y oportunidades de mejora en las estrategias de prevención y tratamiento. Utilizando herramientas de análisis y visualización de datos, se pretende proporcionar una visión integral y accesible sobre la evolución de esta epidemia, permitiendo identificar áreas críticas donde la intervención puede marcar una diferencia significativa. Además, el análisis visual puede fomentar una mayor concienciación social y facilitar la toma de decisiones informadas por parte de gobiernos, ONGs y entidades de salud.
+
+### **Objetivos**
+
+El proyecto se enfoca en cubrir los siguientes objetivos principales:
+
+1. **Analizar la evolución de las infecciones por VIH y los programas de prevención en las últimas décadas**, utilizando datos globales y regionales.
+2. **Visualizar patrones clave relacionados con el impacto de intervenciones específicas**, como la PMTCT, para destacar su efectividad y las áreas donde se necesita reforzar.
+3. **Identificar disparidades regionales y socioeconómicas**, evidenciando cómo factores como el ingreso nacional, la inversión en salud pública y la educación afectan la prevalencia del VIH.
+4. **Promover la conciencia sobre el VIH como un desafío de salud pública aún vigente**, con un enfoque en la alineación con los Objetivos de Desarrollo Sostenible (ODS) establecidos por las Naciones Unidas, especialmente en los objetivos relacionados con la salud y el bienestar (ODS 3).
+5. **Proponer recomendaciones basadas en datos para mejorar la cobertura de los tratamientos y estrategias de prevención**, con el objetivo de contribuir a la meta global de erradicar el VIH como amenaza de salud pública para 2030.
+
+***
+
+## **Aportaciones**
+
+### **Impacto socioeconómico**
+
+El VIH no solo afecta la salud física de quienes lo padecen, sino que también tiene un impacto devastador en las comunidades, los sistemas de salud y las economías nacionales, particularmente en regiones de bajos ingresos. Este proyecto aporta herramientas analíticas y visuales que permiten identificar áreas prioritarias de intervención, ayudando a maximizar la eficiencia en la asignación de recursos. Al comprender las tendencias epidemiológicas del VIH, los responsables de la toma de decisiones pueden diseñar políticas públicas más efectivas, dirigidas a reducir la carga económica y social de esta enfermedad.
+
+### **Impacto técnico y científico**
+
+Desde una perspectiva técnica, el proyecto utiliza tecnologías avanzadas de análisis de datos y visualización interactiva para convertir grandes volúmenes de datos complejos en información clara y comprensible. Esto no solo facilita la interpretación de datos epidemiológicos, sino que también promueve la adopción de herramientas tecnológicas en la investigación y gestión de enfermedades infecciosas. Asimismo, el proyecto contribuye al avance del conocimiento científico al evidenciar relaciones estadísticas y dinámicas regionales que pueden orientar futuras investigaciones.
+
+### **Relación con los Objetivos de Desarrollo Sostenible (ODS)**
+
+Este proyecto está directamente relacionado con los siguientes ODS, que son fundamentales para el progreso global:
+
+**1. ODS 3: Salud y Bienestar**
+Contribuye al objetivo de garantizar una vida sana y promover el bienestar para todos, con un enfoque en [la meta 3.3](https://www.un.org/sustainabledevelopment/es/health/), que busca poner fin a la epidemia del sida para 2030. Los análisis proporcionados pueden guiar estrategias para mejorar el acceso al tratamiento y la prevención, reduciendo las desigualdades en salud.
+
+**2. ODS 10: Reducción de las Desigualdades**
+Al identificar disparidades en la prevalencia del VIH y el acceso a recursos entre países y regiones, el proyecto resalta la importancia de abordar estas desigualdades para garantizar que nadie se quede atrás en la lucha contra la enfermedad.
+
+**3. ODS 17: Alianzas para Lograr los Objetivos**
+Este proyecto promueve la colaboración entre sectores, incluyendo las organizaciones de salud pública y los gobiernos, para compartir datos, herramientas y soluciones en la lucha contra el VIH.
+
+***
+
+
+# **Fuentes de los Datos Utilizados y Análisis de su Fiabilidad**
+
+Para realizar un análisis exhaustivo el impacto del VIH/SIDA en diferentes países, se han utilizado datos de fuentes reconocidas como la **Organización Mundial de la Salud** (OMS), el **Banco Mundial** (BM), **Our World in Data** (OWID) y **Kaggle**. Estas instituciones y plataformas ofrecen datos de alta calidad, ampliamente aceptados por la comunidad científica y empleados en estudios de políticas de salud global.
+
+[**Organización Mundial de la Salud** (OMS)](https://www.who.int/es/data), una agencia especializada de la Organización de las Naciones Unidas, es el estándar en la investigación epidemiológica. En este análisis, se han utilizado datos de la OMS sobre nuevos casos de VIH y el número de muertes por causa, los cuales incluyen información detallada por país, año y clasificación por edad, brindando un panorama preciso de las condiciones de salud.
+
+[**Banco Mundial** (BM)](https://datos.bancomundial.org/) proporciona datos económicos y sociales, como el gasto público en sanidad (ajustado a dólares internacionales a precios de 2015). Su rigor en la recolección y ajuste de datos asegura la fiabilidad y facilita comparaciones entre países, tomando en cuenta inflación y costo de vida.
+
+[**Our World in Data** (OWID)](https://ourworldindata.org/), plataforma de divulgación científica, aporta datos especializados en temas de salud y desarrollo. Su información, que incluye esperanza de vida, número de muertes por VIH y nuevos casos de VIH, se recopila de fuentes como la OMS y el BM, lo que refuerza su fiabilidad. OWID facilita la comprensión de temas complejos mediante visualizaciones claras y accesibles para diversos fines de investigación.
+
+[**Kaggle**](https://www.kaggle.com/), una plataforma de ciencia de datos, ha sido empleada para obtener conjuntos de datos complementarios, como clasificaciones de países y otras variables demográficas. Aunque Kaggle no genera los datos directamente, su comunidad de científicos de datos organiza y limpia conjuntos recopilados de fuentes verificadas, lo que añade valor al análisis. Además, Kaggle permite verificar y reproducir los resultados mediante múltiples aproximaciones.Todos los datos extraidos de esta plataforma tienen una fiabilidad del 100%.
+
+Para garantizar una representación precisa de cada país, se realizó una organización rigurosa de las tablas de datos.
+
+# **Descripción de las Bases de Datos Utilizadas**
+
+A continuación, se detalla la información sobre las bases de datos empleadas en este proyecto. Cada una ha sido cuidadosamente seleccionada, procesada y transformada para garantizar una estructura homogénea y una correcta integración. Además, se especifican sus fuentes originales y las transformaciones realizadas para su uso en el análisis.
+
+# 1. Datos de Clasificación por Países
+Esta base de datos, obtenida de Kaggle, contiene información detallada sobre los países, incluyendo su código numérico, código ISO en formatos de dos y tres caracteres, el nombre completo de cada país en español, el continente al que pertenecen y su clasificación según los grupos de ingresos definidos por organismos internacionales. Estos datos son esenciales para proporcionar contexto geográfico y económico a los análisis y, además, sirvieron como punto de referencia para enriquecer las demás bases de datos con información adicional. No se realizaron transformaciones significativas en este conjunto, ya que su formato original resultaba adecuado para su integración.
+
+# 2. Número Anual de Muertes por Causa 
+Proveniente de Kaggle, este conjunto de datos abarca un amplio rango de causas de mortalidad, incluyendo meningitis, Alzheimer, VIH/SIDA, tuberculosis, diabetes y otras enfermedades. Los registros cubren el período de 1990 a 2019 y están desglosados por país. Este conjunto fue enriquecido con información adicional, como la clasificación de los países según su nivel de ingresos, los continentes a los que pertenecen y el código ISO de tres caracteres para facilitar el análisis y la comparación entre regiones.
+
+# 3. Muertes por VIH por Edad 
+Esta base, también proporcionada por Kaggle, ofrece un desglose detallado de las muertes causadas por VIH según grupos de edad (menores de 5 años, entre 5 y 14 años, entre 15 y 49 años, entre 50 y 69 años, y mayores de 70 años). Los datos están disponibles para el período de 1990 a 2019 y están clasificados por país. Se llevaron a cabo transformaciones similares a las del conjunto anterior, añadiendo la clasificación de ingresos, información del continente y el código ISO, para permitir un análisis detallado y segmentado.
+
+# 4. Muertes por VIH 
+Este conjunto de datos, obtenido de OWID (Our World in Data), incluye información sobre el total de muertes causadas por VIH/SIDA entre 2000 y 2021, desglosado por país. Para homogenizar su formato y facilitar la comparación con otras bases, se incorporaron la clasificación por ingresos, los continentes y los códigos ISO de tres caracteres. Esto permitió que este conjunto de datos se integrara fácilmente con otros relacionados con el VIH/SIDA y su impacto global.
+
+# 5. Población Total 
+Los datos de población total fueron extraídos de la API del Banco Mundial. Este conjunto incluye información sobre la población total de cada país a lo largo de los años, siendo una pieza fundamental para calcular indicadores como tasas per cápita o proporciones relacionadas con salud y economía. Para garantizar su utilidad, los datos se reorganizaron en formato ordenado (tidy data), y se añadieron columnas para clasificar a los países según su nivel de ingresos, continente y código ISO.
+
+# 6. Esperanza de Vida
+Proveniente de Kaggle, esta base de datos detalla la esperanza de vida al nacer en cada país desde 1990 hasta 2019. Este indicador es crucial para evaluar el impacto de políticas públicas y avances en salud. Para facilitar su análisis, se añadieron la clasificación por ingresos, los continentes y el código ISO de tres caracteres, asegurando así su compatibilidad con las demás bases de datos utilizadas en este proyecto.
+
+# 7. Gasto en Sanidad
+Esta base, extraída de OWID, proporciona datos sobre el gasto en salud por país. Las cifras están expresadas en dólares internacionales ajustados a los precios de 2015, lo que permite considerar factores como la inflación y las diferencias en el costo de vida entre países. Este conjunto fue enriquecido con información adicional sobre los grupos de ingresos, continentes y códigos ISO, lo que lo convierte en una herramienta valiosa para analizar la relación entre gasto sanitario y resultados respecto al VIH/SIDA.
+
+# 8. Ingresos Nacionales Brutos
+Esta base de datos, también proporcionada por OWID, clasifica a los países según sus ingresos nacionales brutos y categorías económicas. Además, incluye información geográfica y regional para análisis comparativos. Se agregó el código ISO de tres caracteres a esta base, asegurando su alineación con las demás bases de datos utilizadas en el proyecto.
+
+# 9. Nuevos Casos de VIH
+Este conjunto de datos, obtenido del proyecto HIV/AIDS, detalla los nuevos casos de VIH reportados por país entre 1990 y 2019. Representa una fuente clave para estudiar la evolución de la epidemia y evaluar los esfuerzos de prevención. Como en los demás casos, se incorporaron columnas adicionales con información sobre el grupo de ingresos, el continente y los códigos ISO para facilitar un análisis uniforme y global.
+
+# 10. Huérfanos por VIH/SIDA
+Proveniente de OWID, esta base muestra el número de niños menores de 17 años que quedaron huérfanos debido a la muerte de uno o ambos padres por VIH/SIDA, entre 1990 y 2022. Estos datos son esenciales para comprender el impacto social de la epidemia. Se realizaron transformaciones similares a las aplicadas en otras bases, añadiendo la clasificación de ingresos, continentes y códigos ISO.
+
+# 11. Personas recibiendo TAR
+Este conjunto de OWID ofrece información sobre el número de personas que reciben terapia antirretroviral (TAR) en cada país, cubriendo el período de 2000 a 2022. Este indicador es crucial para evaluar el acceso a tratamientos esenciales para la gestión del VIH/SIDA. Se añadieron las clasificaciones de ingresos, continentes y códigos ISO para garantizar su coherencia con las demás bases.
+
+# 12. Infecciones evitadas
+Finalmente, extraido de OWID, los nuevos casos de VIH y las infecciones evitadas gracias a la implementación de programas de prevención, como la prevención de la transmisión madre a hijo (PMTCT). Este conjunto de datos incluye transformaciones similares: clasificación de ingresos, continentes y códigos ISO.
+
+
+>Cada conjunto de datos ha sido enriquecido con información adicional de clasificación para facilitar análisis comparativos y regionales, manteniendo una estructura uniforme y asegurando su usabilidad en el análisis estadístico del proyecto.
+
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+if (!require(wordcloud)) install.packages('wordcloud') 
+library(wordcloud)
+if (!require(RColorBrewer)) install.packages('RColorBrewer') 
+library(RColorBrewer)
+if (!require(GGally)) install.packages('GGally') 
+library(GGally)
+if (!require(openxlsx)) install.packages('openxlsx') 
+library(openxlsx)
+if (!require(pxR)) install.packages('pxR') 
+library(pxR)
+if (!require(patchwork)) install.packages('patchwork') 
+library(patchwork)
+if (!require(dplyr)) install.packages('dplyr') 
+library(dplyr)
+if (!require(ggplot2)) install.packages('ggplot2') 
+library(ggplot2)
+if (!require(tidyverse)) install.packages('tidyverse') 
+library(tidyverse)
+if (!require(fpp3)) install.packages('fpp3') 
+library(fpp3)
+if (!require(urca)) install.packages('urca') 
+library(urca)
+if (!require(feasts)) install.packages('feasts') 
+library(feasts)
+if (!require(highcharter)) install.packages('highcharter') 
+library(highcharter) 
+library(RColorBrewer)
+if (!require(leaflet)) install.packages('leaflet') 
+library(leaflet)  
+if (!require(geojsonio)) install.packages('geojsonio') 
+library(geojsonio) 
+if (!require(plotly)) install.packages('plotly') 
+library(plotly)
+if (!require(scales)) install.packages('scales') 
+library(scales)
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+income.group <- read.xlsx("country.clasification.xlsx")%>%
+  as_tibble()
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", 
+             "Brazil", "Canada", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominica", 
+             "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", "Guyana", 
+             "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", 
+             "Peru", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", 
+             "Suriname", "Trinidad and Tobago", "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", 
+            "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", 
+            "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", 
+            "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", 
+            "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", 
+            "Russia", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", 
+            "Switzerland", "Ukraine", "United Kingdom", "England")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", 
+            "Cape Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
+            "Congo", "Democratic Republic of Congo", "Djibouti", "Egypt", "Equatorial Guinea", 
+            "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", 
+            "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+            "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
+            "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
+            "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", 
+            "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", 
+          "Cambodia", "China", "Cyprus", "East Timor", "India", "Indonesia", "Iran", "Iraq", 
+          "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", 
+          "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", 
+          "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+          "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", "Turkey", "Turkmenistan", 
+          "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", 
+             "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", 
+             "Tonga", "Tuvalu", "Vanuatu")
+
+numero_de_muertes_por_causa <- read.xlsx("annual-number-of-deaths-by-cause.xlsx")%>%
+  as_tibble() %>%
+  setNames(c(
+  "Entity", "Code", "Year", "Deaths_Meningitis", "Deaths_Alzheimers", "Deaths_Parkinsons",
+  "Deaths_NutritionalDeficiencies", "Deaths_Malaria", "Deaths_Drowning", "Deaths_InterpersonalViolence",
+  "Deaths_Maternal", "Deaths_HIV_AIDS", "Deaths_DrugUse", "Deaths_Tuberculosis", "Deaths_Cardiovascular",
+  "Deaths_LowerRespiratoryInfections", "Deaths_NeonatalDisorders", "Deaths_AlcoholDisorders", "Deaths_SelfHarm",
+  "Deaths_ExposureToForcesOfNature", "Deaths_DiarrhealDiseases", "Deaths_EnvironmentalHeat",
+  "Deaths_Neoplasms", "Deaths_ConflictAndTerrorism", "Deaths_DiabetesMellitus", "Deaths_ChronicKidneyDisease",
+  "Deaths_Poisonings", "Deaths_ProteinEnergyMalnutrition", "Deaths_Terrorism", "Deaths_RoadInjuries",
+  "Deaths_ChronicRespiratory", "Deaths_Cirrhosis", "Deaths_DigestiveDiseases", "Deaths_FireHeatAndHotSubstances",
+  "Deaths_AcuteHepatitis"
+))%>%
+  mutate(
+    Region = case_when(
+      Entity %in% america ~ "America",
+      Entity %in% europa ~ "Europa",
+      Entity %in% asia ~ "Asia",
+      Entity %in% oceania ~ "Oceania",
+      Entity %in% africa ~ "Africa",
+      TRUE ~ "Other"
+    ))%>%relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`)),join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", 
+             "Brazil", "Canada", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominica", 
+             "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", "Guyana", 
+             "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", 
+             "Peru", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", 
+             "Suriname", "Trinidad and Tobago", "United States", "Uruguay", "Venezuela", 
+             "Puerto Rico", "Bermuda", "Greenland", "Guam", "American Samoa", 
+             "United States Virgin Islands")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", 
+            "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", 
+            "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", 
+            "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", 
+            "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", 
+            "Russia", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", 
+            "Switzerland", "Ukraine", "United Kingdom", "Scotland", "Wales", "Northern Ireland")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", 
+          "Brunei", "Cambodia", "China", "India", "Indonesia", "Iran", "Iraq", "Israel", 
+          "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", 
+          "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", 
+          "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+          "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor", 
+          "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", 
+             "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", 
+             "Tonga", "Tuvalu", "Vanuatu", "Cook Islands", "Niue", "Tokelau", "Northern Mariana Islands")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", 
+            "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", 
+            "Cote d'Ivoire", "Democratic Republic of Congo", "Djibouti", "Egypt", 
+            "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+            "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
+            "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
+            "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", 
+            "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+death_vih_by_age <- read.xlsx("deaths-from-hiv-by-age.xlsx") %>%
+  as_tibble() %>%
+  setNames(c("Entity", "Code", "Year", "under_5", "over_70", "from_5_to_14", "from_15_to_49", "from_50_to_69")) %>%
+  mutate(
+    Region = case_when(
+      Entity %in% america ~ "America",
+      Entity %in% europa ~ "Europa",
+      Entity %in% asia ~ "Asia",
+      Entity %in% oceania ~ "Oceania",
+      Entity %in% africa ~ "Africa",
+      TRUE ~ "Other"
+    ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+```
+```{r,echo = FALSE,message = FALSE,warning = FALSE}
+death_vih <- read.csv("number-of-deaths-from-hivaids-who.csv")%>%
+  as_tibble()%>%
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`, continent)), join_by(Code==`ISO_A3`))%>%
+  relocate(continent, .after=Entity) %>%
+  dplyr::rename(`Total_death` = `Total.deaths.from.hiv.aids.amongboth.sexes`)%>%
+  filter(!Entity == "Europe")
+```
+```{r,echo = FALSE,message = FALSE,warning = FALSE}
+poblacion <- read.xlsx("API_SP.POP.TOTL_DS2_es_excel_v2_4145.xlsx") %>%
+  as_tibble() %>%
+  pivot_longer(`1960`:`2023`, names_to = "Year", values_to = "value") %>%
+  select(`Country.Code`, `Year`, `value`)%>%
+  mutate(Year = as.numeric(Year))
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", 
+             "Colombia", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", 
+             "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela", "Aruba", "Bermuda", "Cayman Islands", "Curacao", "French Guiana", 
+             "Guadeloupe", "Martinique", "Puerto Rico", "Saint Barthlemy", "Saint Martin (French part)", 
+             "Saint Pierre and Miquelon", "Sint Maarten (Dutch part)", "Turks and Caicos Islands", 
+             "British Virgin Islands", "United States Virgin Islands")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
+            "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", 
+            "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", 
+            "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", 
+            "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", 
+            "Gibraltar", "Vatican", "Isle of Man", "Faeroe Islands", "Greenland")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", 
+          "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", 
+          "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", 
+          "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", 
+          "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
+          "Vietnam", "Yemen", "Hong Kong", "Macao")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", "Palau", 
+             "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu", "American Samoa", 
+             "Cook Islands", "French Polynesia", "Guam", "New Caledonia", "Niue", "Northern Mariana Islands", 
+             "Tokelau", "Wallis and Futuna")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", 
+            "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", 
+            "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", 
+            "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", 
+            "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe", "Anguilla", "Mayotte", 
+            "Reunion", "Saint Helena", "Western Sahara", "Falkland Islands")
+
+life_expectancy <- read.xlsx("life-expectancy.xlsx")%>%
+  as_tibble() %>% 
+  mutate(Life.expectancy = gsub("\\.", "", Life.expectancy)) %>% 
+  mutate( Life.expectancy = paste0(substr(Life.expectancy, 1, 2), ".", substr(Life.expectancy, 2, length(Life.expectancy))))%>%
+  mutate(Life.expectancy = as.numeric(Life.expectancy))%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", "Colombia", 
+             "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", 
+             "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", 
+            "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", 
+            "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", 
+            "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", 
+            "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", 
+            "United Kingdom")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", 
+          "Georgia", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", 
+          "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", 
+          "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "South Korea", 
+          "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor", "Turkey", "Turkmenistan", "United Arab Emirates", 
+          "Uzbekistan", "Vietnam", "Yemen")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Democratic Republic of Congo", "Djibouti", 
+            "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+            "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", 
+            "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", 
+            "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", 
+             "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu")
+
+Gasto_público <- read.csv("health-expenditure-and-financing-per-capita (1).csv")%>%
+  as_tibble()%>%
+  dplyr::rename(`Health.expenditure` = `Health.expenditure.per.capita...Total`)%>%
+  mutate(Health.expenditure=as.numeric(Health.expenditure)) %>%
+  filter(Entity %in% c(america, europa, asia, africa, oceania)) %>% 
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% africa ~ "Africa",
+    Entity %in% oceania ~ "Oceania",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+INB <- read.xlsx("CLASS.xlsx")%>%
+  as_tibble()%>%
+  filter(!is.na(Income.group))
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", 
+             "Colombia", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", 
+             "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
+            "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", 
+            "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", 
+            "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia", "Slovakia", 
+            "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", "India", 
+          "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", 
+          "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Palestine", "Philippines", 
+          "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", 
+          "Timor", "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", "Palau", 
+             "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", 
+            "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", 
+            "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", 
+            "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", 
+            "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+new_cases_vih <- read.xlsx("new-cases-of-hiv-infection.xlsx")%>%
+  as_tibble()%>%
+  dplyr::rename(new_cases = "Incidence.-.HIV/AIDS.-.Sex:.Both.-.Age:.All.Ages.(Number)")%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Argentina", "Belize", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominican Republic",
+             "Ecuador", "El Salvador", "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua",
+             "Paraguay", "Peru", "Trinidad and Tobago", "Uruguay", "Venezuela")
+
+europa <- c("France", "Georgia", "Ireland", "Italy", "Latvia", "Moldova", "Netherlands", "Romania", "Spain", "Sweden", "Ukraine")
+
+asia <- c("Afghanistan", "Azerbaijan", "Bangladesh", "Cambodia", "Indonesia", "Iran", "Kazakhstan", "Kyrgyzstan", 
+          "Laos", "Malaysia", "Myanmar", "Nepal", "Pakistan", "Philippines", "Saudi Arabia", "Tajikistan", "Thailand", "Vietnam", "Yemen")
+oceania <- c("Australia", "Papua New Guinea")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", 
+            "Central African Republic", "Chad", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", "Djibouti",
+            "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", 
+            "Guinea-Bissau", "Kenya", "Liberia", "Madagascar", "Malawi", "Mali", "Mauritania", "Morocco", 
+            "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Senegal", "Sierra Leone", "Somalia", "South Africa",
+            "South Sudan", "Sudan", "Tanzania", "Togo", "Uganda", "Zambia")
+
+
+Orphaned_aids <- read.csv("number-of-children-orphaned-from-aids.csv") %>%
+  as_tibble() %>%
+  mutate(`Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate` = as.numeric(`Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate`)) %>%
+  replace_na(list(`Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate` = 0)) %>%
+  dplyr::rename(AIDS.Orphans = `Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate`)%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+nuevas_infecciones_niños_infecciones_paradas_por_PMTCT <- read.csv("number-of-new-hiv-child-infections-vs-number-of-infections-averted-due-to-pmtct (1).csv")%>%as_tibble()%>%rename(
+    infecciones_evitadas = `infections_averted_pmtct__disaggregation_estimate`,
+    nuevas_infecciones = `new_infections__disaggregation_children__0_14__estimate`
+  )
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+Africa = c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", 
+             "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", "Djibouti", "Egypt", 
+             "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+             "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+             "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
+             "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
+             "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", 
+             "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+  America = c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia (Plurinational State of)", "Brazil", "Canada", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominica", 
+              "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", "Guyana", 
+              "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", 
+              "Peru", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", 
+              "Suriname", "Trinidad and Tobago", "United States of America", "Uruguay", 
+              "Venezuela (Bolivarian Republic of)")
+
+  Asia = c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei Darussalam", 
+           "Cambodia", "China", "Cyprus", "Democratic People's Republic of Korea", "Georgia", "India", 
+           "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Israel", "Japan", "Jordan", 
+           "Kazakhstan", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Lebanon", 
+           "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "Oman", "Pakistan", "Philippines", 
+           "Qatar", "Republic of Korea", "Saudi Arabia", "Singapore", "Sri Lanka", "Syrian Arab Republic", 
+           "Tajikistan", "Thailand", "Timor-Leste", "Turkmenistan", "Uzbekistan", "Viet Nam", "Yemen")
+  
+  Europe = c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", 
+             "Croatia", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+             "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", 
+             "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", 
+             "Portugal", "Republic of Moldova", "Romania", "Russian Federation", "San Marino", 
+             "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Turkey", 
+             "Ukraine", "United Kingdom of Great Britain and Northern Ireland")
+  
+  Oceania = c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (Federated States of)", 
+              "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", 
+              "Tonga", "Tuvalu", "Vanuatu")
+
+antiretroviral <- read.csv("data.csv") %>%
+  as_tibble() %>%
+  rename(
+    "value" = `Reported.number.of.people.receiving.antiretroviral.therapy`,
+    Entity = `Countries..territories.and.areas`
+  ) %>%
+  select(Entity, Year, value) %>%
+  left_join(
+    income.group %>%
+      select(ISO_A3, country,  WorldBank.income.group),
+    by = c("Entity" = "country")
+  ) %>%
+  mutate(value = as.numeric(value))%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity)%>%mutate(TAR = value)
+
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+Funding_to_support_efforts_against_HIV_AIDS <- read.csv("https://ourworldindata.org/grapher/hiv-expenditure.csv?v=1&csvType=full&useColumnShortNames=true")%>%as_tibble()
+```
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+Atributos <- poblacion%>%left_join(life_expectancy%>%dplyr::select(Code, Year, Life.expectancy), join_by(Country.Code == Code, Year == Year))%>%rename(poblacion = value)%>%left_join(new_cases_vih%>%dplyr::select(Code, Year, new_cases), join_by(Country.Code == Code, Year == Year))%>%left_join(Orphaned_aids%>%dplyr::select(Code, Year, AIDS.Orphans), join_by(Country.Code == Code, Year == Year))%>%left_join(income.group%>%dplyr::select(ISO_A3, country, `WorldBank.income.group`), join_by(Country.Code == ISO_A3))%>%left_join(death_vih%>%dplyr::select(Code, Year, Total_death), join_by(Country.Code == Code, Year == Year))%>%left_join(Gasto_público%>%dplyr::select(Code, Year, Health.expenditure), join_by(Country.Code == Code, Year == Year))%>%relocate(country)%>%left_join(nuevas_infecciones_niños_infecciones_paradas_por_PMTCT%>%dplyr::select(Code, Year, infecciones_evitadas, nuevas_infecciones), join_by(Country.Code == Code, Year == Year))%>%left_join(antiretroviral%>%dplyr::select(ISO_A3, Year, TAR), join_by(Country.Code == ISO_A3, Year == Year))%>%arrange(Year)
+```
+***
+
+## **Análisis exploratorio inicial  de los datos**
+
+Durante el procesamiento e integración de los datos, se encontraron las siguientes incidencias que requirieron atención para garantizar la calidad y consistencia de los datos:
+
+**Formatos Inconsistentes:**
+La variable Year apareció en diferentes formatos, lo que dificultó la combinación de conjuntos de datos. Se corrigió normalizando este atributo a el tipo correspondiente.
+Algunas bases como life_expectancy y death_vih tenían valores numéricos almacenados como cadenas debido a separadores de miles o puntos decimales mal interpretados. Esto fue corregido aplicando transformaciones para convertirlos a valores numéricos.
+
+**Datos Faltantes o Nulos:**
+En el conjunto Orphaned_aids, la columna de niños huérfanos por VIH contenía valores NA. Estos fueron reemplazados por ceros, asumiendo que los valores faltantes correspondían a registros sin huérfanos reportados.
+En otros conjuntos, como Gasto_público y life_expectancy, se encontraron celdas vacías que requerían imputación o eliminación según su relevancia.
+
+**Clasificación de Países:**
+Algunos países en las bases de datos no tenían información de continente o nivel de ingreso en income.group. Estos fueron etiquetados como "Other" o "Sin Clasificar" según el contexto.
+También el nombre de los países a veces no coincidian por ejemplo "USA" y "United States" para eso se incluyen los códigos ISO, para facilitar la comparación de varios atributos.
+
+**Estructura de los Datos:**
+Bases como poblacion y death_vih_by_age estaban en formato tidy, mientras que otras como numero_de_muertes_por_causa requerían pivotar columnas o normalizar su estructura para análisis, se usan según sea preciso para cada visualización.
+Algunas columnas innecesarias o repetitivas fueron eliminadas para reducir la redundancia y mejorar la claridad.
+
+
+Al finalizar el proyecto, la creación de la tabla final consolidada con todos los atributos fue clave para realizar análisis comparativos entre países, años y regiones. Aseguraron una base sólida para explorar las relaciones entre las variables y obtener conclusiones sobre los impactos del VIH/SIDA a nivel global.
+
+***
+
+## **Contexto Histórico de la Epidemia de VIH/SIDA**
+
+El VIH (Virus de Inmunodeficiencia Humana) y el SIDA (Síndrome de Inmunodeficiencia Adquirida) han sido problemas de salud pública a nivel global desde su aparición. A lo largo de las décadas, los avances en medicina y políticas de salud han permitido la implementación de tratamientos efectivos, como la terapia antirretroviral y la prevención de la transmisión de madre a hijo (PMTCT, por sus siglas en inglés). Sin embargo, el impacto del VIH/SIDA sigue siendo desigual en diferentes regiones y grupos socioeconómicos, afectando de manera desproporcionada a los países de bajos ingresos y a las poblaciones en riesgo.
+
+Fue identificado en los años 1980, se convirtió rápidamente en una crisis de salud pública global. Sus efectos fueron devastadores, especialmente en regiones de bajos ingresos como África, donde la falta de infraestructura sanitaria, recursos y programas educativos limitó la prevención y el tratamiento. En cambio, regiones como América del Norte y Europa lograron implementar respuestas sanitarias más efectivas, lo que les permitió reducir el impacto del virus a través de recursos médicos avanzados y políticas de salud accesibles. Aun así, en sus primeras décadas, el VIH causó millones de muertes a nivel mundial, ya que los tratamientos disponibles eran limitados y en su mayoría costosos.
+
+La gráfica siguiente nos muestra las 15 principales causas de muerte mundial entre 2012 y 2022 y entre 1997 y 2011.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+options(scipen = 999)
+
+muertes_1997_2009 <- numero_de_muertes_por_causa %>%
+  filter(Year >= 1997 & Year <= 2009) %>%
+  pivot_longer(cols = Deaths_AcuteHepatitis:Deaths_Meningitis, names_to = "causa", values_to = "valor") %>%
+  replace_na(list(valor = 0)) %>%
+  group_by(causa) %>%
+  summarize(Total_muertes = sum(valor)) %>%
+  arrange(desc(Total_muertes)) %>%
+  slice(1:15) %>%
+  mutate(periodo = "1997-2009")
+
+muertes_2010_2022 <- numero_de_muertes_por_causa %>%
+  filter(Year >= 2010 & Year <= 2022) %>%
+  pivot_longer(cols = Deaths_AcuteHepatitis:Deaths_Meningitis, names_to = "causa", values_to = "valor") %>%
+  replace_na(list(valor = 0)) %>%
+  group_by(causa) %>%
+  summarize(Total_muertes = sum(valor)) %>%
+  arrange(desc(Total_muertes)) %>%
+  slice(1:15) %>%
+  mutate(periodo = "2010-2022")
+
+muertes_comparativa <- rbind(muertes_1997_2009, muertes_2010_2022)
+
+p_comparativo<- muertes_comparativa %>%
+  ggplot(aes(x = reorder(causa, -Total_muertes), y = Total_muertes, fill = periodo, 
+             text = sprintf("Causa: %s\nTotal de muertes: %s\nPeriodo: %s", causa, scales::comma(as.numeric(Total_muertes)), periodo))) +
+  geom_bar(position = "dodge", stat = "identity") +
+  labs(title = "Comparación de las 15 principales causas de muerte entre periodos",
+       x = "Causa", y = "Total de Muertes") +
+  scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, size = 10)) + 
+  scale_fill_manual(values = c("1997-2009" = "red", "2010-2022" = "darkred"))
+
+ggplotly(p_comparativo, tooltip = "text")
+
+
+```
+
+Las enfermedades cardiovasculares son la principal causa, seguidas por cáncer y enfermedades respiratorias crónicas en ambos casos. Otras causas destacadas incluyen infecciones respiratorias, problemas digestivos e infecciones neonatales.
+
+Cabe mencionar que el VIH/SIDA también figura entre las principales causas, reflejando su considerable impacto en la mortalidad global. Este análisis permite entender qué condiciones de salud han afectado más en términos de mortalidad en las últimas décadas.
+
+Para entender la desigualdad en el impacto de la epidemia, podemos observar un mapa de calor que muestra la evolución de la mortalidad por VIH en cada continente. En él se representa cómo la mortalidad ha disminuido en varias regiones, en particular a partir del año 2000, y destaca los continentes más afectados.
+
+```{r,  echo = FALSE, message = FALSE, warning = FALSE, fig.width=10}
+
+death_vih_norm <- death_vih %>% 
+  filter(!is.na(continent))%>%
+  group_by(continent, Year) %>%
+  summarise(Total_death_sum = sum(Total_death, na.rm = TRUE)) %>%
+  mutate(Total_death_norm = Total_death_sum / max(Total_death_sum))
+
+p <- death_vih_norm %>%
+  ggplot(aes(Year, continent, fill = Total_death_norm)) + 
+    geom_tile() + 
+    scale_fill_gradientn(colors = brewer.pal(9, 'Reds')) +
+    theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggplotly(p)
+
+
+```
+
+Los colores más oscuros indican años con mayor número de muertes relativas, mientras que los más claros reflejan una disminución.
+
+La normalización de datos es un proceso que ajusta los valores para que se puedan comparar de forma más fácil, independientemente de sus escalas originales. En este gráfico, los datos de muertes por VIH fueron normalizados, lo cual significa que se ajustaron para que el año con el mayor número de muertes tenga un valor de 1, y los demás años tengan valores entre 0 y 1, dependiendo de su proporción respecto al máximo.
+
+Sin normalización, las cifras absolutas de muertes en cada continente y año podrían ser difíciles de comparar, ya que algunos continentes tienen poblaciones mucho más grandes que otros y, por lo tanto, podrían tener números absolutos de muertes mayores. Al normalizar, se enfoca en la tendencia y la proporción de muertes en cada región a lo largo del tiempo, eliminando el efecto de esas diferencias de escala.
+
+Este gráfico evidencia que, entre los años 2000 y 2005, África presenta los colores más oscuros, lo cual confirma su posición como la región con mayor mortalidad en esos primeros años. En comparación, América del Norte y Europa muestran colores más claros, indicando un menor impacto relativo en la mortalidad, gracias a la disponibilidad temprana de tratamientos y mejores servicios de salud. 
+
+A partir de 2010, la mayoría de los continentes muestran una tendencia hacia tonos más claros, lo cual refleja la disminución en las muertes relacionadas con el VIH debido a la terapia antirretroviral (TAR), que ha hecho que el VIH sea manejable en vez de mortal. Sin embargo, África continúa siendo el continente más afectado, lo que resalta las desigualdades persistentes en el acceso a los tratamientos.
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+  geoj <- geojson_read('https://ctim.es/AEDV/data/geo_countries.geojson',  what = "sp")
+
+  geoj.tb <- geoj %>%
+    as_tibble()
+  
+  geoj.tb.causas_muerte_filtrada <- geoj.tb %>% 
+    left_join(antiretroviral, join_by("ISO_A3" == "ISO_A3"))
+
+  data <- geoj.tb.causas_muerte_filtrada$value
+  pal <- colorQuantile("Reds", data, n = 9)
+  legend.title <- "Personas recibiendo TAR"
+  
+  etiquetas <- paste(
+    "<strong> ",
+    geoj.tb$ADMIN,
+    "</strong><br>",
+    legend.title, 
+    ": ",
+    prettyNum(round(data, digits = 2), big.mark = ",", scientific = FALSE)
+  ) %>% lapply(htmltools::HTML)
+
+  geoj %>%
+    leaflet() %>%  
+    setView(lng = 25, lat = 22, zoom = 2) %>% 
+    addPolygons(
+      fillColor = ~pal(data), 
+      weight = 2,
+      opacity = 1,
+      color = "white",
+      dashArray = "3",
+      fillOpacity = 0.7,
+      highlightOptions = highlightOptions( 
+        weight = 2,
+        color = rgb(0.2, 0.2, 0.2),
+        dashArray = "",
+        fillOpacity = 0.7,
+        bringToFront = TRUE
+      ),
+      label = etiquetas 
+    ) %>% 
+    addLegend("bottomleft", pal = pal, values = data,
+      title = legend.title,
+      labFormat = function(type, cuts, p) {
+        n = length(cuts) 
+        x = (cuts[-n] + cuts[-1]) / 2
+        x = prettyNum(round(x, digits = 2), big.mark = ",", scientific = FALSE)
+        as.character(x)
+      },
+      opacity = 1
+    )
+
+```
+
+En África subsahariana, que tiene una alta prevalencia de VIH, se observa una considerable cantidad de personas recibiendo TAR, destacándose algunos países en tonos más oscuros.
+Los países más desarrollados, como Estados Unidos, Canadá y naciones de Europa occidental, también tienen altos números de personas en TAR, probablemente debido a un acceso más amplio a los tratamientos.
+Algunas regiones de Asia y América Latina muestran cantidades más moderadas.
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+
+p <- nuevas_infecciones_niños_infecciones_paradas_por_PMTCT %>% 
+  filter(Entity == "World") %>%
+  ggplot(aes(x = Year)) +
+  geom_line(aes(y = infecciones_evitadas, color = "Infecciones evitadas por PMTCT")) +
+  geom_point(aes(y = infecciones_evitadas, color = "Infecciones evitadas por PMTCT")) +
+  geom_line(aes(y = nuevas_infecciones, color = "Nuevas infecciones de VIH")) +
+  geom_point(aes(y = nuevas_infecciones, color = "Nuevas infecciones de VIH")) +
+  labs(title = "Nuevas infecciones de VIH vs Infecciones evitadas por PMTCT",
+       x = "Año",
+       y = "Número de infecciones",
+       color = "Leyenda") +
+  scale_color_manual(values = c("Infecciones evitadas por PMTCT" = "darkred", "Nuevas infecciones de VIH" = "red")) +
+  scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) + 
+  theme_minimal()
+
+
+ggplotly(p)
+
+```
+
+El gráfico muestra dos tendencias importantes relacionadas con el VIH: las nuevas infecciones anuales y las infecciones evitadas gracias a la prevención de la transmisión maternoinfantil (PMTCT). A lo largo de los años, se observa un pico de nuevas infecciones en el año 2000, con más de 400,000 casos anuales, seguido de un descenso sostenido gracias a la implementación de programas de prevención, educación y tratamiento antirretroviral. Paralelamente, las infecciones evitadas por PMTCT han aumentado significativamente desde principios del 2000, reflejando el impacto positivo de estas intervenciones médicas que buscan evitar la transmisión de madre a hijo durante el embarazo, el parto o la lactancia. Este cambio destaca los avances logrados en la lucha contra el VIH, particularmente en el contexto de la transmisión vertical, y subraya la importancia de los programas dirigidos a las mujeres embarazadas. Sin embargo, el hecho de que todavía existan nuevas infecciones resalta la necesidad de continuar fortaleciendo y ampliando estos esfuerzos, especialmente en regiones con recursos limitados, donde el acceso a la atención prenatal sigue siendo un desafío.
+
+En paralelo al impacto de la mortalidad, el VIH ha devastado comunidades enteras al dejar a numerosos niños huérfanos, en particular en África. El número de niños que han perdido a uno o ambos padres a causa del VIH es un recordatorio de cómo esta crisis sanitaria también se convirtió en una crisis social y económica.
+
+Para ilustrar la gravedad de este impacto, podemos ver dos gráficos circulares de la proporción de niños huérfanos debido al VIH en África y otras regiones. Este gráfico expone cómo la epidemia afectó a las familias y cómo sigue afectando la vida de millones de niños.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE}
+
+poblacion_2000 <- poblacion %>% filter(Year == 2000)
+
+resultados <- Orphaned_aids %>%
+  filter(Year == 2000) %>%
+  left_join(poblacion_2000, by = c("Code" = "Country.Code", "Year" = "Year")) %>%
+  filter(Region != "Other") %>%
+  group_by(Region) %>%
+  summarise(
+    huerfanos = sum(na.omit(AIDS.Orphans)), 
+    total_poblacion = sum(value, na.rm = TRUE)
+    ) %>%
+  mutate(porcentaje_huerfanos = huerfanos / total_poblacion,
+         labels = scales::percent(porcentaje_huerfanos))
+
+plot_ly(resultados, labels = ~Region, values = ~porcentaje_huerfanos, type = 'pie',
+        textinfo = 'label+percent',
+        insidetextorientation = 'radial',
+        marker = list(colors = c("Africa" = "#F8968C",
+                                 "Asia" = "#DD4636", 
+                                 "Oceania" = "#EB6F5B",
+                                 "America" = "#AD0B1E", 
+                                 "Europa" = "#9C0824"))) %>%
+  layout(title = "Proporción de niños huérfanos por VIH en 2000")
+
+```
+
+Se muestra cómo el VIH ha afectado de manera desproporcionada a los niños en distintas regiones del mundo, generando una gran cantidad de huérfanos debido a la alta mortalidad entre sus padres infectados. Este impacto es especialmente pronunciado en ciertas regiones donde el VIH tiene una prevalencia significativa y los recursos para combatir la epidemia son limitados.
+
+### Distribución Regional de los Niños Huérfanos por VIH:
+La mayoría de los niños huérfanos por VIH se concentra en África, que representa un porcentaje significativamente alto en comparación con otras regiones. Esto se debe a que África es la región más afectada por la epidemia del VIH, donde la alta prevalencia del virus y la mortalidad asociada han dejado a muchos niños sin uno o ambos padres.
+En contraste, regiones como América, Europa y Oceanía muestran una proporción mucho menor de huérfanos por VIH, lo que refleja una posible menor incidencia del virus y una mayor disponibilidad de tratamientos y programas de prevención en esas áreas.
+
+### Relación entre Recursos Económicos y Apoyo a los Huérfanos:
+En países de ingresos bajos, especialmente en África, las familias y las comunidades a menudo carecen de los recursos necesarios para apoyar adecuadamente a los niños huérfanos por VIH. Esto hace que los niños enfrenten mayores desafíos, como falta de acceso a la educación, atención médica limitada y mayor riesgo de caer en situaciones de pobreza extrema.
+En regiones de ingresos más altos, aunque el número de huérfanos por VIH es menor, existen sistemas de apoyo más robustos y políticas de protección infantil que ayudan a mejorar las condiciones de vida de estos niños. Esto subraya cómo el contexto económico y social puede influir en la calidad de vida de los huérfanos por VIH.
+
+### Impacto Psicológico y Social en los Niños:
+La orfandad por VIH no solo representa una pérdida económica para las familias, sino que también tiene un impacto psicológico profundo en los niños. La pérdida de uno o ambos padres, combinada con el estigma asociado al VIH en algunas culturas, puede tener efectos duraderos en el bienestar mental de estos niños.
+En muchas comunidades afectadas, los huérfanos por VIH son más vulnerables a la discriminación y a la exclusión social, lo que complica aún más su situación y su integración en la sociedad.
+
+### Desafíos para la Salud Pública:
+El elevado número de huérfanos por VIH en ciertas regiones representa un reto importante para la salud pública y para los sistemas de bienestar social. En áreas con una alta proporción de niños huérfanos, los gobiernos y organizaciones no gubernamentales enfrentan la necesidad urgente de proporcionar apoyo a estas poblaciones, ya sea a través de programas de adopción, apoyo psicológico, acceso a la educación y servicios de salud.
+
+Este desafío también evidencia la necesidad de fortalecer los esfuerzos de prevención y tratamiento en estas regiones para reducir la mortalidad por VIH y, en última instancia, disminuir el número de niños que pierden a sus padres a causa de la epidemia.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE}
+poblacion_2016 <- poblacion %>% filter(Year == 2016)
+
+resultados <- Orphaned_aids %>%
+  filter(Year == 2016) %>%
+  left_join(poblacion_2016, by = c("Code" = "Country.Code", "Year" = "Year")) %>%
+  filter(Region != "Other") %>%
+  group_by(Region) %>%
+  summarise(
+    huerfanos = sum(na.omit(AIDS.Orphans)), 
+    total_poblacion = sum(value, na.rm = TRUE)
+    ) %>%
+  mutate(porcentaje_huerfanos = huerfanos / total_poblacion,
+         labels = scales::percent(porcentaje_huerfanos))
+
+plot_ly(resultados, labels = ~Region, values = ~porcentaje_huerfanos, type = 'pie',
+        textinfo = 'label+percent',
+        insidetextorientation = 'radial',
+        marker = list(colors = c("Africa" = "#F8968C",
+                                 "Asia" = "#DD4636", 
+                                 "Oceania" = "#EB6F5B",
+                                 "America" = "#AD0B1E", 
+                                 "Europa" = "#9C0824"))) %>%
+  layout(title = "Proporción de niños huérfanos por VIH en 2016")
+
+```
+
+El gráfico de la proporción de niños huérfanos por VIH en 2016 resalta el impacto devastador de la epidemia en las familias y, especialmente, en los niños de las regiones más afectadas. Este análisis pone de relieve las diferencias en la carga que representa el VIH en distintas regiones y la necesidad de intervenciones dirigidas a reducir las tasas de mortalidad por VIH y proporcionar apoyo integral a los huérfanos. También subraya la importancia de una respuesta internacional coordinada para apoyar a las comunidades más afectadas y crear entornos seguros y de apoyo para los niños que han perdido a sus padres debido al VIH.
+
+### Importancia de las desigualdades económicas.
+
+La capacidad de respuesta al VIH depende en gran medida de los gastos en salud. Los países de altos ingresos pueden dedicar mayores recursos a la salud, lo cual facilita la implementación de programas de prevención y el acceso a tratamientos avanzados. En cambio, los países de bajos ingresos enfrentan restricciones presupuestarias que limitan su capacidad para responder a epidemias como el VIH.
+
+Para ilustrar esta diferencia, podemos consultar una visualización dinámica de series temporales que muestra el gasto en salud por Regiones a lo largo del tiempo. Esta visualización permite identificar cómo regiones con distintos niveles de ingresos han priorizado el gasto en salud y cómo esta inversión ha afectado su capacidad para enfrentar la epidemia de VIH.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+Gasto_público1 <- Gasto_público %>%
+  filter(Year <= 2020 & Year >= 2011) %>%
+  mutate(Year = as.double(Year))%>%
+  group_by(`Year`, `Region`) %>%
+  summarize(Health.expenditure = round(mean(na.omit(Health.expenditure)), 2)) 
+
+colores_rojos <- c("#FF9999", "#FF6666", "red", "#CC0000", "#990000")
+
+Gasto_público_ts <- tsibble(
+  date = Gasto_público1$Year,
+  population = Gasto_público1$Health.expenditure,
+  location = Gasto_público1$Region,
+  index = date,
+  key = location
+) %>% 
+  fill_gaps()
+
+hchart(
+  Gasto_público_ts, 
+  "line",
+  hcaes(x = date, y = population, group = location)) %>%
+  hc_title(text = "Gasto en salud per cápita por Regiones a lo largo del tiempo")%>%
+  hc_xAxis(title = list(text = "Año")) %>%
+  hc_yAxis(title = list(text = "Gasto en salud per cápita"))%>%
+  hc_colors(colores_rojos)
+  
+```
+
+En esta serie temporal, vemos que los países de ingresos altos muestran un gasto sostenido y creciente en salud, lo que les permite abordar epidemias como el VIH de manera más efectiva. En los países de ingresos bajos y medios, el gasto en salud es significativamente menor, lo cual dificulta la implementación de tratamientos y programas de prevención eficaces. Esta falta de inversión contribuye a que las tasas de contagio y mortalidad sigan siendo altas en regiones de bajos ingresos, como se refleja en los gráficos anteriores. Esto también resalta la necesidad de apoyo internacional para garantizar que todos los países puedan responder de manera adecuada a las amenazas de salud pública.
+
+Como anteriormente se ha nombrado el gasto en salud pública per cápita es un factor esencial para enfrentar el VIH de manera efectiva.
+
+Los gráficos de gasto per cápita en los años 2000 y 2019 permiten observar si el gasto ha aumentado o se ha mantenido constante en distintos países. Este crecimiento o estancamiento en el gasto sanitario se relaciona directamente con la capacidad para implementar y sostener programas de tratamiento de VIH.
+
+```{r,echo = FALSE, fig.width = 10, fig.asp = 2, message = FALSE, warning = FALSE}
+
+data <- Gasto_público %>%
+  mutate(Year = as.numeric(Year)) %>%
+  filter(!is.na(Health.expenditure) & Year > 2000 & Year < 2020)
+
+# Crear el gráfico
+p <- ggplot(data, aes(x = Year, y = Health.expenditure, group = Entity, color = Entity)) +
+  geom_line() +
+  scale_color_manual(values = colorRampPalette(c("lightpink", "darkred"))
+                     (length(unique(data$Entity)))) +
+  facet_wrap(~Entity, scales = "free_y", ncol = 5) +
+  labs(
+    title = "Gasto en Sanidad Per Cápita por País",
+    x = "Año",
+    y = "Gasto en sanidad per cápita"
+  ) +
+  theme_minimal() +
+  theme(
+    legend.position = "none",
+    strip.text = element_text(size = 10, face = "bold")
+  )
+
+ggplotly(p)
+
+
+```
+
+Los países con incrementos significativos en gasto de salud per cápita muestran una mejora en la respuesta al VIH y en el control de la transmisión. Sin embargo, en países donde el gasto se ha mantenido bajo, el progreso en la lucha contra el VIH sigue siendo limitado, lo cual subraya la necesidad de incrementar las inversiones en salud en estas regiones vulnerables.
+
+El VIH afecta de manera distinta a cada grupo etario, tanto en términos de mortalidad como en la carga de enfermedad. En áreas con alta prevalencia, la infección tiene un impacto devastador en jóvenes adultos, quienes representan una gran parte de la fuerza laboral y de la población en edad reproductiva, afectando no solo a las personas, sino también a las familias y comunidades.
+
+Este gráfico circular ilustra la distribución de muertes por VIH según grupos de edad, mostrando una mayor concentración en el grupo de 15 a 49 años. Los colores permiten ver claramente los grupos más vulnerables y cuánta proporción representan en las muertes relacionadas con el VIH.
+
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+
+death_vih_by_age %>%
+  pivot_longer(cols = "under_5":"from_50_to_69", names_to = "age_group", values_to = "deaths") %>%
+  group_by(age_group) %>%
+  summarise(deaths = sum(deaths, na.rm = TRUE)) %>%
+  mutate(labels = paste0(age_group, ": ", scales::percent(deaths / sum(deaths)))) %>%
+  plot_ly(
+    labels = ~age_group,
+    values = ~deaths,
+    textinfo = 'label+percent',
+    insidetextorientation = 'radial',
+    marker = list(colors = c(
+      "from_15_to_49" = "#EE6A50",
+      "from_5_to_14" = "#CD2626", 
+      "from_50_to_69" = "#A52A2A",
+      "over_70" = "red", 
+      "under_5" = "darkred"
+    ))
+  ) %>%
+  add_pie(hole = 0.4) %>%
+  layout(
+    title = "Distribución de muertes por grupo de edad debido al VIH",
+    showlegend = FALSE
+  )
+
+
+```
+
+La prevalencia de muertes en adultos jóvenes (15-49 años) evidencia cómo el VIH afecta de forma desproporcionada a este grupo. Estos datos sugieren la necesidad urgente de programas de prevención, educación y acceso a tratamientos antirretrovirales para este segmento poblacional, con el fin de proteger tanto la salud individual como el desarrollo económico de las comunidades.
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+p <- life_expectancy%>%
+  left_join(Gasto_público%>%select(Entity, Year, Health.expenditure), join_by(Entity == Entity, Year == Year))%>%
+  filter(Year > 1990)%>%
+  filter(!is.na(Health.expenditure) & Year == 2015)%>%
+  ggplot(aes(x=Health.expenditure,y=Life.expectancy, label=Entity)) + 
+    geom_point() +
+    scale_x_continuous(trans = 'log2') +
+    geom_smooth(method = lm) + 
+  labs(title = "Diagrama de dispersión",
+       x = "Gasto en sanidad", y = "Esperanza de vida") +
+  theme_minimal()
+  
+ggplotly(p)
+```
+
+se observa una clara relación positiva entre el gasto público en sanidad y la esperanza de vida. A medida que aumenta el gasto en sanidad, la esperanza de vida de la población también tiende a incrementarse de forma significativa. Esto sugiere que una mayor inversión en salud pública está asociada con mejores resultados en términos de bienestar y longevidad.
+
+La esperanza de vida se ha visto seriamente afectada en países con alta incidencia de VIH, especialmente en aquellos con sistemas de salud débiles o acceso limitado a tratamientos. En países de bajos ingresos, el VIH ha frenado o revertido los avances en la esperanza de vida alcanzados en décadas anteriores.
+
+Se destaca la esperanza de vida en países con las tasas más bajas, incluyendo algunos gravemente afectados por el VIH, como Sierra Leona y Nigeria. La comparación permite entender cómo el VIH, junto a otros factores, disminuye significativamente la esperanza de vida en estos países.
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+paises_seleccionados1 <- life_expectancy %>%
+  group_by(Entity) %>%
+  summarize(
+    Life.expectancy = mean(Life.expectancy)
+    ) %>%
+  arrange(Life.expectancy) %>%
+  slice(1:6) %>%
+  pull(Entity)
+
+datos_filtrados1 <- life_expectancy %>%
+  filter(Entity %in% paises_seleccionados1)
+
+p1 <- ggplot(datos_filtrados1, aes(x = Entity, y = Life.expectancy, fill = Entity, 
+                text = sprintf("Año: %g\nEsperanza de vida: %.2f", Year, Life.expectancy))) +
+  geom_boxplot(show.legend = FALSE) +
+  geom_jitter(shape = 16, position = position_jitter(0.2), show.legend = FALSE) +
+  labs(title = "Esperanza de vida más baja de los países",
+       x = "País",
+       y = "Esperanza de vida") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 50, hjust = 1),
+        legend.position = "none") +
+  scale_fill_manual(values = c("Sierra Leone" = "#FF9999",
+                                "Mali" = "red", 
+                                "South Sudan"  = "#CC0000",
+                                 "Niger"  = "#FF6665", 
+                                "Nigeria"  = "#990000", 
+                               "Central African Republic" = "darkred"))
+  
+ggplotly(p1, tooltip="text")
+```
+
+Los países con esperanza de vida más alta (por ejemplo, Hong Kong y Monaco) muestran un contraste marcado con aquellos de ingresos bajos, lo cual resalta la influencia del acceso a servicios médicos y programas de salud pública efectivos.
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+paises_seleccionados2 <- life_expectancy %>%
+  group_by(Entity) %>%
+  summarize(
+    Life.expectancy = mean(Life.expectancy)
+    ) %>%
+  arrange(desc(Life.expectancy)) %>%
+  slice(1:6) %>%
+  pull(Entity)
+
+datos_filtrados2 <- life_expectancy %>%
+  filter(Entity %in% paises_seleccionados2)
+
+p2 <- ggplot(datos_filtrados2, aes(x = Entity, y = Life.expectancy, fill = Entity, 
+                text = sprintf("Año: %g\nEsperanza de vida: %.2f", Year, Life.expectancy))) +
+  geom_boxplot(show.legend = FALSE) +
+  geom_jitter(shape = 16, position = position_jitter(0.2), show.legend = FALSE) +
+  labs(title = "Esperanza de vida más alta de los países",
+       x = "País",
+       y = "Esperanza de vida") +
+  theme_minimal() +
+  theme(axis.text.x = element_text(angle = 50, hjust = 1),
+        legend.position = "none") +
+  scale_fill_manual(values = c("Channel Islands" = "#FF9999",
+                               "Faeroe Islands" = "red",
+                               "Hong Kong" = "#CC0000",
+                               "Israel" = "#FF6665",
+                               "Monaco" = "#990000",
+                               "San Marino" = "darkred"))
+
+
+ggplotly(p2, tooltip = "text")
+
+```
+
+Los datos reflejan una gran disparidad en la esperanza de vida entre países. Las naciones con mayor incidencia de VIH y menor acceso a tratamiento presentan los índices más bajos, lo que enfatiza la importancia de ampliar el acceso a programas de prevención y tratamiento del VIH, especialmente en zonas de bajos ingresos.
+
+El ingreso nacional influye directamente en la capacidad de un país para financiar programas de prevención y tratamiento del VIH. En países de bajos ingresos, los recursos limitados afectan la disponibilidad de tratamiento, incrementando la carga de la enfermedad y limitando las oportunidades para reducir las tasas de transmisión.
+
+Este gráfico muestra la proporción de países en cada grupo de ingresos dentro de diferentes regiones, destacando la cantidad de países de ingresos bajos y medios en regiones con alta prevalencia de VIH.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+
+p <- INB %>%
+  group_by(Region, Income.group) %>%
+  summarise(
+    country_count = n(), 
+    .groups = 'drop') %>%
+  group_by(Region) %>%
+  mutate(
+    proportion = round(country_count /sum(country_count) * 100), 2) %>%
+  ggplot(aes(x = Region, y = proportion, fill = Income.group)) +
+  geom_bar(stat = "identity") +
+  labs(title = "Proporción de países por grupo de ingresos en cada región",
+       x = "Región",
+       y = "Proporción de países (%)",
+       fill = "Grupo de Ingresos") +
+  scale_fill_manual(values = c("High income" = "#FF9999",
+                                "Low income" = "#CC0000", 
+                                "Lower middle income" = "red",
+                                "Upper middle income" = "darkred")) +
+  theme_minimal() + 
+      theme(axis.text.x = element_text(angle = 45, hjust = 1))
+ggplotly(p)
+
+```
+
+Las regiones con una mayor proporción de países de bajos ingresos enfrentan desafíos significativos para implementar programas de tratamiento y prevención. Esta visualización subraya la necesidad de apoyo internacional y de alianzas regionales que faciliten el acceso a tratamientos y programas de educación para reducir la transmisión del VIH en áreas de altos índices de pobreza.
+
+Las tasas de nuevos casos suelen ser también más altas según el nivel de ingresos, reflejando barreras significativas en el acceso a programas de salud pública.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+
+p1 <- ggplotly(
+  new_cases_vih %>%
+    filter(Year > 2000 & `WorldBank.income.group` == "Upper middle income" ) %>% 
+    select(Year, new_cases) %>% 
+    group_by(Year) %>%
+    summarize(new_cases = mean(na.omit(new_cases))) %>%
+    ggplot(aes(x = Year, y = new_cases)) +
+    geom_line(color = "red") +
+    geom_point(color = "darkred")
+)
+
+p2 <- ggplotly(
+  new_cases_vih %>%
+    filter(Year > 2000 & `WorldBank.income.group` == "High income" ) %>% 
+    select(Year, new_cases) %>% 
+    group_by(Year) %>%
+    summarize(new_cases = mean(na.omit(new_cases))) %>%
+    ggplot(aes(x = Year, y = new_cases)) +
+    geom_line(color = "red") +
+    geom_point(color = "darkred")
+)
+
+p3 <- ggplotly(
+  new_cases_vih %>%
+    filter(Year > 2000 & `WorldBank.income.group` == "Low income" ) %>% 
+    select(Year, new_cases) %>% 
+    group_by(Year) %>%
+    summarize(new_cases = mean(na.omit(new_cases))) %>%
+    ggplot(aes(x = Year, y = new_cases)) +
+    geom_line(color = "red") +
+    geom_point(color = "darkred")
+)
+
+p4 <- ggplotly(
+  new_cases_vih %>%
+    filter(Year > 2000 & `WorldBank.income.group` == "Lower middle income" ) %>% 
+    select(Year, new_cases) %>% 
+    group_by(Year) %>%
+    summarize(new_cases = mean(na.omit(new_cases))) %>%
+    ggplot(aes(x = Year, y = new_cases)) +
+    geom_line(color = "red") +
+    geom_point(color = "darkred")
+)
+
+
+combined_plot <- subplot(p1, p2, p3, p4, nrows = 2, margin = 0.1, titleX = FALSE, titleY = FALSE) %>%
+  layout(annotations = list(
+    list(x = 0.05, y = 1.05, text = "Upper middle income", showarrow = FALSE, xref = "paper", yref = "paper", font = list(size = 16, color = "black", family = "Arial", bold = TRUE)),
+    list(x = 0.90, y = 1.05, text = "High income", showarrow = FALSE, xref = "paper", yref = "paper", font = list(size = 16, color = "black", family = "Arial", bold = TRUE)),
+    list(x = 0.05, y = 0.42, text = "Low income", showarrow = FALSE, xref = "paper", yref = "paper", font = list(size = 16, color = "black", family = "Arial", bold = TRUE)),
+    list(x = 0.90, y = 0.42, text = "Lower middle income", showarrow = FALSE, xref = "paper", yref = "paper", font = list(size = 16, color = "black", family = "Arial", bold = TRUE))
+))
+
+combined_plot
+
+```
+
+Los datos indican una disparidad en el control de la transmisión del VIH entre países. Mientras que los países de altos ingresos tienen unos valores de nuevos casos inferiores a cualquier otro grupo de ingresos vemos como en los ultimos años han aumentado hasta ahora que se han estabilizado través de políticas efectivas, en los países de ingresos bajos y medios, la incidencia sigue siendo significativamente más alta, pero se ve una disminución, lo cual enfatiza la necesidad de aumentar políticas de salud inclusivas y efectivas en estos países para reducir la carga de la enfermedad.
+
+### Evolución de la Esperanza de Vida
+
+El impacto del VIH va más allá de las tasas de contagio y mortalidad; la epidemia también ha tenido un efecto considerable en la esperanza de vida, especialmente en las regiones más afectadas. A medida que el VIH se propagaba en África y otras áreas de bajos recursos, la esperanza de vida en estos lugares disminuyó drásticamente. En contraste, las regiones con mejores sistemas de salud lograron mitigar este impacto.
+
+La visualización de series temporales de la esperanza de vida por continente permite observar cómo el VIH ha influido en la expectativa de vida en cada región, destacando la recuperación gradual en algunas áreas y la persistencia de desafíos en otras.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+
+life_expectancy_avg <- life_expectancy %>%
+  filter(Region != "Other") %>%
+  filter(!is.na(`WorldBank.income.group`)) %>%
+  mutate(date = as.Date(paste0(Year, "-01-01"))) %>%
+  filter(date > as.Date("1950-01-01")) %>%
+  group_by(date, `WorldBank.income.group`) %>%
+  summarize(population = mean(Life.expectancy, na.rm = TRUE)) %>%
+  ungroup()
+colores_rojos <- c( "#FF6666", "red", "#CC0000", "#990000")
+
+life_expectancy_avg_ts <- life_expectancy_avg %>%
+  as_tsibble(index = date, key = `WorldBank.income.group`)
+
+hchart(
+  life_expectancy_avg_ts,
+  "line",
+  hcaes(x = date, y = population, group = `WorldBank.income.group`)
+) %>%
+  hc_title(text = "Evolución de la Esperanza de Vida en Diferentes Grupos de Ingreso") %>%
+  hc_xAxis(title = list(text = "Año")) %>%
+  hc_yAxis(title = list(text = "Esperanza de Vida Promedio")) %>%
+  hc_colors(colores_rojos)
+
+```
+
+La visualización de series temporales de la esperanza de vida por continente permite observar cómo el VIH ha influido en la expectativa de vida en cada región, destacando la recuperación gradual en algunas áreas y la persistencia de desafíos en otras.
+
+### Comparación de las series temporales de los nuevos casos de VIH
+
+La evolución y la relación de nuevos casos de VIH en diferentes regiones (África, América, Asia y Europa). Cada panel compara las tendencias entre dos continentes, mostrando puntos de datos y una línea de tendencia. 
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+new_cases_vih_cleaned <- new_cases_vih %>% 
+  filter(!Region == "Other")%>%
+  group_by(Year, Region) %>%
+  summarize(new_cases = sum(new_cases, na.rm = TRUE))
+
+new_cases_vih_ts <- tsibble(
+  date = new_cases_vih_cleaned$Year,
+  population = new_cases_vih_cleaned$new_cases,
+  location = new_cases_vih_cleaned$Region,
+  index = date,
+  key = location
+) %>%
+fill_gaps()
+
+  
+  new_cases_vih_ts%>%
+pivot_wider(values_from=population, names_from=location)%>%
+GGally::ggpairs(columns = 2:5) + 
+labs(title="Nuevos casos VIH")
+
+```
+
+Los valores de "Corr" indican la correlación entre los nuevos casos en cada par de regiones:
+
+Correlaciones altas: Por ejemplo, entre América y Europa (-0.868 y -0.831) o África y Europa (0.967), lo que indica que las tendencias de casos en estas regiones tienen una relación fuerte, ya sea positiva o negativa.
+Patrones regionales: África muestra picos más altos en comparación con otras regiones, mientras que América y Europa tienen menos variación.
+
+Las tendencias de casos nuevos de VIH varían considerablemente entre continentes. Las correlaciones altas sugieren similitudes en algunos patrones, probablemente influenciados por factores globales o regionales comunes en la transmisión y control del VIH.
+
+***
+
+## **Análisis de atributos**
+
+El análisis de atributos constituye una pieza clave para entender las interrelaciones entre los diferentes factores que influyen en el impacto del VIH/SIDA a nivel global y regional. Mediante la matriz de correlación, se evalúan las conexiones entre indicadores críticos, destacando patrones y posibles áreas de intervención.
+
+Los atributos considerados en este análisis incluyen:
+
+**Esperanza de vida:** Refleja el impacto directo e indirecto del VIH/SIDA en la longevidad, influido por el acceso a tratamientos y programas de salud.
+
+**Gasto en sanidad:** Un indicador crucial que demuestra cómo la inversión en salud pública se relaciona con la capacidad de respuesta ante la epidemia.
+
+**Huérfanos por SIDA:** Mide el impacto social y demográfico, representando la carga que esta enfermedad impone en los sistemas de bienestar.
+
+**Infecciones evitadas (PMTCT):** Evalúa la efectividad de programas como la prevención de la transmisión maternoinfantil.
+
+**Muertes por VIH:** Ilustra la gravedad de la enfermedad en términos de mortalidad y su relación con factores económicos y de infraestructura sanitaria.
+
+**Nuevos casos de SIDA:** Refleja las tendencias en la transmisión del virus y la efectividad de las estrategias de prevención.
+
+**Personas con TAR (terapia antirretroviral):** Representa el acceso al tratamiento y su impacto en la gestión de la enfermedad.
+
+**Población total:** Proporciona un contexto para analizar las tasas per cápita y las proporciones afectadas.
+
+### Matriz de correlación
+
+Una matriz de correlación es una herramienta que permite analizar cómo están relacionadas diferentes variables. En este caso, se observan relaciones entre indicadores relacionados con la salud, como la esperanza de vida, el gasto en sanidad, y la incidencia del VIH/SIDA. Los valores de correlación varían entre -1 y 1: un valor cercano a 1 indica una fuerte correlación positiva (cuando una variable aumenta, la otra también), mientras que un valor cercano a -1 indica una fuerte correlación negativa (cuando una variable aumenta, la otra disminuye).
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+Atributos %>%
+    rename(
+      country = "country",
+      Country.Code = "Country.Code",
+      Year = "Year",
+      poblacion = "poblacion",
+      `Esperanza de vida` = "Life.expectancy",
+      `Nuevos casos SIDA` = "new_cases",
+      `Huerfanos por SIDA` = "AIDS.Orphans",
+      `Grupo de ingresos` = "WorldBank.income.group",
+      `Muertes por VIH` = "Total_death",
+      `Gasto en sanidad` = "Health.expenditure",
+      `Infecciones evitadas PMTCT` = "infecciones_evitadas",
+      `Nuevas infecciones` = "nuevas_infecciones",
+      `Personas con Tar` = `TAR`
+    ) %>%
+    pivot_longer(
+      cols = c(poblacion, `Esperanza de vida`, `Nuevos casos SIDA`, `Huerfanos por SIDA`, 
+               `Muertes por VIH`, `Gasto en sanidad`, `Infecciones evitadas PMTCT`, `Personas con Tar`),
+      names_to = "atributos",
+      values_to = "value"
+    ) %>%
+    dplyr::select(Year, country, atributos, value)%>%
+  filter(!is.na(country))%>%
+  group_by(country, atributos)%>%
+  summarise(value=last(na.omit(value)))%>%
+  pivot_wider(names_from = atributos, values_from = value)%>%
+  column_to_rownames(var="country") %>% 
+  cor(use='complete.obs') %>%
+  hchart()
+```
+En esta matriz se destacan algunas relaciones significativas. Por ejemplo, existe una correlación positiva entre la esperanza de vida y el gasto en sanidad, lo que sugiere que los países que invierten más en salud pública tienen poblaciones con mayor longevidad. Por otro lado, la esperanza de vida muestra una correlación negativa con variables como las muertes por VIH y los nuevos casos de SIDA, lo cual evidencia el impacto devastador que tiene esta enfermedad en la calidad de vida de las personas y en los sistemas de salud de los países más afectados. Asimismo, el gasto en sanidad se relaciona positivamente con infecciones evitadas, reforzando la importancia de la inversión en estrategias de prevención para controlar la epidemia. Vemos como la población no guarda relación directa con los indicadores ya que están más influenciados por políticas de salud, sistemas de prevención, y contexto epidemiológico del país y no por el tamaño poblacional.
+
+### Análisis de las componentes principales
+
+El Análisis de Componentes Principales (PCA) es una técnica estadística que transforma un conjunto de variables originales en un nuevo conjunto de variables no correlacionadas llamadas componentes principales. Estas componentes son combinaciones lineales de las variables originales, es decir, se obtienen al combinar las variables iniciales (por ejemplo, esperanza de vida, gasto en sanidad, muertes por VIH) mediante coeficientes ponderados. Los coeficientes para cada componente principal se calculan de forma que cada componente busca maximizar la varianza.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+pca_data<-Atributos %>%
+    rename(
+      country = "country",
+      Country.Code = "Country.Code",
+      Year = "Year",
+      poblacion = "poblacion",
+      `Esperanza de vida` = "Life.expectancy",
+      `Nuevos casos SIDA` = "new_cases",
+      `Huerfanos por SIDA` = "AIDS.Orphans",
+      `Grupo de ingresos` = "WorldBank.income.group",
+      `Muertes por VIH` = "Total_death",
+      `Gasto en sanidad` = "Health.expenditure",
+      `Infecciones evitadas PMTCT` = "infecciones_evitadas",
+      `Nuevas infecciones` = "nuevas_infecciones",
+      `Personas con Tar` = `TAR`
+    ) %>%
+   pivot_longer(
+      cols = c(`Esperanza de vida`, `Nuevos casos SIDA`, `Huerfanos por SIDA`, 
+               `Muertes por VIH`, `Gasto en sanidad`, `Personas con Tar`),
+      names_to = "atributos",
+      values_to = "value"
+    ) %>%
+    dplyr::select(Year, country, atributos, value)%>%
+  filter(!is.na(country))%>%
+  group_by(country, atributos)%>%
+  summarise(value=last(na.omit(value)))%>%
+  pivot_wider(names_from = atributos, values_from = value)%>%
+  column_to_rownames(var="country")%>%
+  na.omit()
+pca <- prcomp(pca_data, scale. = TRUE)
+tibble(
+   label=fct_inorder(paste("PC",1:length(pca$sdev))),
+   varPercent = pca$sdev^2/sum(pca$sdev^2) * 100
+  ) %>%
+  ggplot(aes(x=label,y=varPercent)) +
+  geom_bar(stat = "identity") +
+  labs(x= "Componentes Principales",y= "Porcentaje varianza explicada") +
+  geom_text(aes(label=paste0(round(varPercent,digits = 1),"%")),size=3,colour = "blue",nudge_y = 1.) +
+  theme_minimal()
+
+```
+El gráfico de barras muestra los porcentajes de varianza explicada, se observa que la primera componente principal (PC1) explica el 77.8% de la variación total en los datos. Esto significa que la mayor parte de la información contenida en el conjunto de datos puede ser interpretada a través de esta única componente, lo cual facilita el análisis. La segunda componente principal (PC2) aporta un 17.3% de la variabilidad adicional, y aunque su contribución es menor, también ayuda a identificar patrones secundarios en los datos. Las siguientes componentes, como la PC3 y PC4, tienen un impacto marginal, explicando menos del 3% cada una. Si aplicáramos el criterio del 2% podriamos despreciar las componentes 5 y 6, pues no aportan casi información a los datos.
+
+### Gráfico de dipersión las Dos Componentes Principales
+
+El gráfico de las dos primeras componentes principales combina la información obtenida del PCA para mostrar relaciones entre las variables y los países analizados.
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+pca_data<-Atributos %>%
+    rename(
+      country = "country",
+      Country.Code = "Country.Code",
+      Year = "Year",
+      poblacion = "poblacion",
+      `Esperanza de vida` = "Life.expectancy",
+      `Nuevos casos SIDA` = "new_cases",
+      `Huerfanos por SIDA` = "AIDS.Orphans",
+      `Grupo de ingresos` = "WorldBank.income.group",
+      `Muertes por VIH` = "Total_death",
+      `Gasto en sanidad` = "Health.expenditure",
+      `Infecciones evitadas PMTCT` = "infecciones_evitadas",
+      `Nuevas infecciones` = "nuevas_infecciones",
+      `Personas con Tar` = `TAR`
+    ) %>%
+   pivot_longer(
+      cols = c(`Esperanza de vida`, `Nuevos casos SIDA`, `Huerfanos por SIDA`, 
+               `Muertes por VIH`, `Gasto en sanidad`, `Personas con Tar`),
+      names_to = "atributos",
+      values_to = "value"
+    ) %>%
+    dplyr::select(Year, country, atributos, value)%>%
+  filter(!is.na(country))%>%
+  group_by(country, atributos)%>%
+  summarise(value=last(na.omit(value)))%>%
+  pivot_wider(names_from = atributos, values_from = value)%>%
+  column_to_rownames(var="country")%>%
+  na.omit()
+pca <- prcomp(pca_data, scale. = TRUE)
+hchart(pca,choices=c(1,2))
+```
+
+Las lineas representan las variables originales, indicando cómo cada una contribuye a las componentes principales. 
+Las que se encuentren en la misma dirección reflejan correlación positiva y en direcciones opuestas indican correlación negativa.
+Su largo muestra la magnitud de la contribución de la variable.
+Por ejemplo, la "esperanza de vida" (la cual aporta de  anera considerable a las componentes) y el "gasto en sanidad" apuntan en direcciones similares, mostrando su relación positiva, mientras que "muertes por VIH" apunta en dirección opuesta, indicando una relación negativa con la esperanza de vida.
+Si la linea tiende más a estar paralela al eje x decimos que tiene más peso en la primera componente y viseversa.
+Los puntos representan países. Los países de cerca del centro tienen valores promedio en las variables, Sin embargo los países alejados del centro tienen valores extremos. Por ejemplo, Sudáfrica está cerca de la flecha de "nuevos casos de VIH", indicando alta incidencia, mientras que países europeos están alineados con "esperanza de vida" y "gasto en sanidad", mostrando mejores indicadores.
+
+---
+
+## **Cuadro de mandos**
+
+Un cuadro de mandos es una aplicación web interactiva que recopila y presenta indicadores clave, permitiendo visualizar datos de forma dinámica. Este dashboard se centra en el análisis del impacto del VIH/SIDA en diferentes regiones, facilitando la toma de decisiones basada en datos.
+
+El cuadro de mandos ha sido desarrollado con la librería Shiny y utiliza Flexboard para la interfaz, ofreciendo 8 secciones principales:
+
+ **General:** Proporciona una descripción de los datos, que provienen de fuentes como la OMS, OWID y el Banco Mundial. Incluye un mapa interactivo que muestra la distribución geográfica de los datos.
+
+**Comparaciones:**
+
+**Nuevas infecciones de VIH vs Infecciones evitadas por PMTCT:** Analiza tendencias globales y regionales para evaluar la efectividad de programas de prevención de transmisión materno-infantil (PMTCT).
+Huérfanos por VIH: Muestra distribuciones de niños huérfanos debido al VIH, usando gráficos de pastel para resaltar proporciones.
+**Impacto en la esperanza de vida:** Explora cómo el VIH/SIDA afecta la esperanza de vida mediante gráficos de caja (boxplots).
+**Gasto en Salud:** Permite visualizar y comparar la evolución del gasto en salud relacionado con el VIH/SIDA en diferentes países a lo largo del tiempo.
+
+**Comparación de atributos:** Incluye un gráfico de regresión lineal donde los usuarios pueden aplicar transformaciones (como sqrt, log o boxcox) para analizar relaciones entre variables seleccionadas.
+
+**Mapa de muertes por causa:** Examina la mortalidad por diferentes causas, distribuidas por años y regiones, con gráficos interactivos para identificar tendencias.
+
+**Predicciones:** Utiliza modelos ARIMA para proyectar tendencias futuras en nuevos casos de VIH, muertes y otros indicadores. Los usuarios pueden ajustar los parámetros de predicción y el rango de datos históricos.
+
+**Matriz de correlación:** Representa gráficamente la relación entre variables cuantitativas, permitiendo identificar correlaciones fuertes, débiles o nulas en diferentes períodos.
+
+**PCA (Análisis de Componentes Principales):** Muestra la varianza explicada por las principales variables mediante gráficos de dispersión y de barras, facilitando la identificación de los factores más influyentes.
+
+>Cada sección es interactiva, permitiendo personalización de parámetros y acceso a información relevante de manera precisa. Este cuadro de mandos está diseñado para facilitar el análisis y la toma de decisiones estratégicas.
+
+---
+
+## **Predicciones**
+
+En los últimos años, los avances en el tratamiento del VIH han permitido controlar la epidemia en muchos lugares, pero las desigualdades en el acceso a estos tratamientos suponen un obstáculo importante. Al observar las predicciones futuras de la evolución del VIH, es posible anticipar qué regiones necesitarán mayores recursos y esfuerzos para reducir aún más los contagios y la mortalidad.
+
+El modelo ARIMA es una herramienta estadística que se utiliza para analizar y hacer predicciones basadas en datos de series temporales. Esto significa que toma en cuenta cómo los datos cambian a lo largo del tiempo para identificar patrones y proyectar valores futuros. ARIMA es especialmente útil cuando queremos predecir valores futuros a partir de datos históricos, como en este caso, donde queremos proyectar el número de muertes o nuevos casos de VIH en los próximos años.
+
+ARIMA significa AutoRegressive Integrated Moving Average, utiliza tres componentes principales:
+
+**AutoRegressive (AR)**: Este componente analiza cómo los valores pasados de la serie influyen en los valores futuros. Por ejemplo, si las muertes en un año están relacionadas con las del año anterior.
+
+**Integrated (I)**: Se enfoca en hacer que los datos sean más estables (por ejemplo, eliminando tendencias) para facilitar el análisis.
+
+**Moving Average (MA)**: Examina cómo las desviaciones en los datos (como variaciones inesperadas) afectan a los valores futuros.
+
+
+Para entender esto mejor, el gráfico de predicciones de nuevos casos y mortalidad nos ayuda a visualizar la evolución proyectada del VIH a nivel global y regional, identificando las áreas donde es probable que persistan los desafíos en los próximos años.
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+death_vih_ts <- death_vih %>%
+filter(Year >= 2000 & !is.na(continent)) %>%
+  group_by(continent, Year) %>%
+  summarise(
+    Total_death = mean(na.omit(`Total_death`), na.rm = TRUE),
+    .groups = "drop"
+  ) %>% 
+  as_tsibble(
+    index = Year,
+    key = continent
+  )
+
+death_vih_ARIMA <- death_vih_ts %>%
+  fill_gaps() %>%
+  model(ARIMA(Total_death))
+                                          
+
+death_vih_ARIMA_prediccion <- death_vih_ARIMA %>%
+  forecast(h = "5 years")
+
+death_vih_ARIMA_prediccion %>%
+  autoplot(death_vih_ts ) + 
+  labs(title = "Muertes por VIH predicción a cinco años", 
+       x = "Año", 
+       y = "Esperanza de vida") + 
+  theme_minimal()
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE, fig.width=10}
+new_cases_vih_ARIMA <- new_cases_vih_ts%>%
+  model(ARIMA(population))
+
+new_cases_vih_ARIMA_prediccion <- new_cases_vih_ARIMA%>%
+  forecast(h = "5 years")
+
+new_cases_vih_ARIMA_prediccion%>%
+  autoplot(new_cases_vih_ts) + 
+  labs(title="Nuevos casos de VIH con ARIMA", 
+       x = "Año", 
+       y = "Nuevos casos") +
+  theme_minimal()
+  
+
+```
+
+En estos gráficos de predicciones, se observa que mientras los casos y las tasas de mortalidad tienden a disminuir en las regiones con mejor acceso a tratamientos, como América del Norte y Europa, otras regiones continúan enfrentando desafíos. África, en particular, presenta una curva de disminución más lenta en las predicciones, lo cual sugiere que, a menos que se incremente el acceso a los tratamientos y se intensifiquen las campañas de prevención, la carga del VIH seguirá siendo alta en esta región. Esto subraya la importancia de la cooperación internacional y de una distribución equitativa de los recursos para combatir la epidemia a nivel global.
+
+---
+
+## **Grado de Consecución de los Objetivos**
+
+Los objetivos propuestos al inicio del proyecto se han alcanzado de manera satisfactoria. 
+
+ **Logros clave destacados**
+
+1. **Análisis histórico y regional**  
+   Se han analizado las tendencias históricas de las infecciones por VIH, lo que permitió identificar patrones relevantes en la evolución de la epidemia y los impactos de las intervenciones a nivel global y regional.
+
+2. **Visualizaciones efectivas**  
+   Se desarrollaron gráficos claros que evidencian la efectividad de programas como la PMTCT (Prevención de la Transmisión Maternoinfantil del VIH) en la reducción de nuevas infecciones, y se documentaron las desigualdades en el acceso a recursos sanitarios.
+
+3. **Alineación con los ODS**  
+   El proyecto ha contribuido a generar conciencia sobre los desafíos que el VIH aún presenta, alineándose directamente con el ODS 3 (Salud y Bienestar) y destacando la necesidad de combatir las desigualdades sanitarias.
+
+> Aunque se lograron los objetivos principales, algunas limitaciones quedaron fuera del alcance del proyecto, como el acceso a datos de mayor resolución para análisis locales o el desarrollo de modelos predictivos más detallados.
+
+---
+
+## **Posibles Extensiones**
+
+1. **Análisis subregional**  
+   Ampliar el análisis a niveles más específicos, como comunidades locales, para diseñar intervenciones más personalizadas y efectivas.
+
+2. **Comparación con otras enfermedades**  
+   Extender la metodología utilizada para evaluar el impacto de otras enfermedades infecciosas como tuberculosis o malaria, que a menudo están relacionadas con el VIH.
+
+3. **Herramientas interactivas**  
+   Desarrollar dashboards interactivos que permitan a investigadores y formuladores de políticas explorar los datos y gráficos de manera autónoma, usando tecnologías como *Shiny* en R.
+
+4. **Estudios cualitativos**  
+   Incorporar datos cualitativos que documenten experiencias personales de quienes viven con VIH y las perspectivas de los proveedores de salud, para enriquecer el análisis cuantitativo.
+
+5. **Ampliación a otros ODS**  
+   Vincular el análisis con otros Objetivos de Desarrollo Sostenible, como el ODS 5 (Igualdad de Género), explorando cómo factores como el género influyen en el acceso a tratamientos y prevención.
+
+
+>Estas extensiones permitirán abordar de manera más integral la problemática del VIH, contribuyendo no solo al avance científico y técnico, sino también al mejoramiento de la equidad y sostenibilidad en salud global.
+
+
+---
+
+## **Conclusiones Finales**
+
+Los gráficos analizados resaltan cómo la epidemia de VIH ha afectado no solo la salud individual, sino también indicadores sociales y económicos clave, como el gasto en salud y la esperanza de vida. Los gráficos de predicción subrayan que, aunque el VIH está siendo controlado en algunas áreas, persisten desigualdades que deben ser abordadas. Asimismo, las visualizaciones de gasto en salud y de esperanza de vida refuerzan que los países con mayores ingresos han podido responder de manera más efectiva a la epidemia, mientras que las regiones de ingresos bajos, como África, necesitan apoyo adicional para mejorar sus indicadores de salud.
+
+A medida que el VIH ha pasado de ser una enfermedad letal a una condición manejable en gran parte del mundo, el desafío continúa siendo asegurar un acceso equitativo a tratamientos y servicios de salud para las poblaciones vulnerables. Fortalecer los sistemas de salud en áreas de bajos ingresos y proporcionar recursos adecuados para la prevención y el tratamiento del VIH ayudaría a reducir estas desigualdades y a mejorar la calidad de vida de quienes aún enfrentan el mayor impacto de esta epidemia.
+
+
+
+
+
+
+
+
+
+---

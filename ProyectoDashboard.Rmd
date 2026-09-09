@@ -1,0 +1,1937 @@
+---
+title: "Impacto del VIH/SIDA en Diferentes Regiones"
+output: 
+  flexdashboard::flex_dashboard:
+    css: custom.css
+runtime: shiny
+---
+
+General
+=======================================================================
+
+```{r}
+shiny::renderUI({
+  tagList(
+    div(style = "font-family: 'Times New Roman', serif; color: #2d485e;",
+
+      h3("Información general", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+
+      p("Esta página contiene diferentes secciones en las que se presenta un análisis exhaustivo sobre la mortalidad, los casos de VIH, el gasto en salud, y la expectativa de vida en distintas regiones y a lo largo de los años. Este análisis tiene como objetivo comprender el impacto del VIH/SIDA en diversas áreas geográficas y sus implicaciones a nivel social y de salud pública. Los datos utilizados provienen de fuentes fiables como WHO, OWID, Kaggle o Grupo Banco Mundial y abarcan los países para proporcionar una visión global y detallada de esta problemática."),
+
+      p("Además, se incluye una exploración de cómo las tendencias en el gasto en salud y la mortalidad relacionada con el VIH han cambiado a lo largo del tiempo en diferentes regiones. Esto permite evaluar los esfuerzos globales y locales para combatir la epidemia y entender mejor cómo el VIH/SIDA sigue afectando a diversas poblaciones en el contexto de mejoras en la salud pública."),
+
+      h3("Datos Utilizados", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+
+      p("A continuación, se detalla la información utilizada en el análisis para cada categoría de datos:"),
+
+      div(style = "display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;",
+
+        div(style = "border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; width: calc(50% - 20px);",
+            h3("Mortalidad por VIH/SIDA", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+            p("Para el análisis de la mortalidad, se consideraron las cifras de muertes registradas como consecuencia de diferentes causas y enfermedades, VIH y VIH por rango de edades cada una en cada región y año. Esto permite identificar tendencias y evaluar el impacto del VIH/SIDA en términos de mortalidad a lo largo del tiempo."),
+            p(strong("Unidades:"), " Número de muertes.")
+        ),
+
+        div(style = "border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; width: calc(50% - 20px);",
+            h3("Casos Nuevos de VIH", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+            p("Este análisis se centra en los casos nuevos de VIH reportados anualmente. La información se desglosa por región y por país para visualizar la evolución de los casos y el progreso en la prevención de nuevas infecciones."),
+            p(strong("Unidades:"), " Número de casos.")
+        )
+      ),
+
+      div(style = "display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;",
+
+        div(style = "border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; width: calc(50% - 20px);",
+            h3("Esperanza de Vida", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+            p("La expectativa de vida se incluyó en el análisis para observar posibles correlaciones entre los cambios en la salud pública y el impacto del VIH/SIDA en la población. Este dato se presenta como un promedio anual por región."),
+            p(strong("Unidades:"), " Años de vida.")
+        ),
+
+        div(style = "border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; width: calc(50% - 20px);",
+            h3("Gasto en Salud", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+            p("Para evaluar los recursos destinados a la atención de la salud, se analizó el gasto público en salud. Este dato permite conocer la inversión en servicios de salud y su relación con la gestión del VIH/SIDA."),
+            p(strong("Unidades:"), " Dólares estadounidenses (USD).")
+        )
+      ),
+
+      div(style = "display: flex; gap: 20px; flex-wrap: wrap; margin: 10px 0;",
+
+        div(style = "border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; width: calc(50% - 20px);",
+            h3("Infecciones Evitadas (PMTCT)", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+            p("Este análisis evalúa el impacto de los programas de prevención de la transmisión maternoinfantil (PMTCT) para reducir el número de infecciones nuevas en niños."),
+            p(strong("Unidades:"), " Número de infecciones evitadas.")
+        ),
+
+        div(style = "border: 2px solid #e74c3c; padding: 15px; border-radius: 8px; width: calc(50% - 20px);",
+            h3("Infecciones Tratadas (TAR)", style = "font-family: 'Times New Roman', serif; color: darkred;"),
+            p("Se analiza el número de personas con VIH que reciben terapia antirretroviral (TAR) para mitigar los efectos de la infección y mejorar la calidad de vida."),
+            p(strong("Unidades:"), " Número de infecciones tratadas.")
+        )
+      ),
+
+      div(
+        style = "border: 2px solid #e74c3c; border-radius: 10px; padding: 25px; margin-bottom: 30px;",
+        img(src = "https://www.socalemfyc.org/wp-content/uploads/2021/12/hiv-g6f15f2c38_1920-1080x675.jpg", style = "max-width: 100%; height: auto; display: block; margin: 0 auto;")
+      )
+    )
+  )
+})
+
+
+```
+
+
+```{r global, include=FALSE}
+library(MASS)
+library(shiny)
+library(shinydashboard)
+library(datasets)
+library(highcharter) 
+library(fpp3)
+library(RColorBrewer)
+library(openxlsx)  
+library(geojsonio)
+library(scales)
+library(plotly)
+library(tsibble)
+library(dplyr)
+library(fable)
+library(ggplot2)
+library(patchwork)
+library(tidyverse)
+library(leaflet)  
+pdf(file = NULL) # evita errores al hacer el box-cox en shiny 
+```
+
+```{r,echo=FALSE}
+knitr::opts_chunk$set(
+  warning = FALSE,
+  message = FALSE,
+  cache=FALSE,
+  echo=FALSE
+)
+```
+
+```{r}
+income.group <- read.xlsx('country.clasification.xlsx')%>%
+  as_tibble()
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", 
+             "Brazil", "Canada", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominica", 
+             "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", "Guyana", 
+             "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", 
+             "Peru", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", 
+             "Suriname", "Trinidad and Tobago", "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", 
+            "Bulgaria", "Croatia", "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", 
+            "France", "Germany", "Greece", "Hungary", "Iceland", "Ireland", "Italy", 
+            "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", 
+            "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", 
+            "Russia", "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", 
+            "Switzerland", "Ukraine", "United Kingdom", "England")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", 
+            "Cape Verde", "Cameroon", "Central African Republic", "Chad", "Comoros", 
+            "Congo", "Democratic Republic of Congo", "Djibouti", "Egypt", "Equatorial Guinea", 
+            "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", 
+            "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+            "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
+            "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
+            "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", 
+            "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", 
+          "Cambodia", "China", "Cyprus", "East Timor", "India", "Indonesia", "Iran", "Iraq", 
+          "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", 
+          "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", 
+          "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", 
+          "South Korea", "Sri Lanka", "Syria", "Tajikistan", "Thailand", "Turkey", "Turkmenistan", 
+          "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", 
+             "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", 
+             "Tonga", "Tuvalu", "Vanuatu")
+
+numero_de_muertes_por_causa <- read.xlsx('annual-number-of-deaths-by-cause.xlsx')%>%
+  as_tibble() %>%
+  setNames(c(
+  "Entity", "Code", "Year", "Deaths_Meningitis", "Deaths_Alzheimers", "Deaths_Parkinsons",
+  "Deaths_NutritionalDeficiencies", "Deaths_Malaria", "Deaths_Drowning", "Deaths_InterpersonalViolence",
+  "Deaths_Maternal", "Deaths_HIV_AIDS", "Deaths_DrugUse", "Deaths_Tuberculosis", "Deaths_Cardiovascular",
+  "Deaths_LowerRespiratoryInfections", "Deaths_NeonatalDisorders", "Deaths_AlcoholDisorders", "Deaths_SelfHarm",
+  "Deaths_ExposureToForcesOfNature", "Deaths_DiarrhealDiseases", "Deaths_EnvironmentalHeat",
+  "Deaths_Neoplasms", "Deaths_ConflictAndTerrorism", "Deaths_DiabetesMellitus", "Deaths_ChronicKidneyDisease",
+  "Deaths_Poisonings", "Deaths_ProteinEnergyMalnutrition", "Deaths_Terrorism", "Deaths_RoadInjuries",
+  "Deaths_ChronicRespiratory", "Deaths_Cirrhosis", "Deaths_DigestiveDiseases", "Deaths_FireHeatAndHotSubstances",
+  "Deaths_AcuteHepatitis"
+))%>%
+  mutate(
+    Region = case_when(
+      Entity %in% america ~ "America",
+      Entity %in% europa ~ "Europa",
+      Entity %in% asia ~ "Asia",
+      Entity %in% oceania ~ "Oceania",
+      Entity %in% africa ~ "Africa",
+      TRUE ~ "Other"
+    ))%>%relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region) %>% pivot_longer(`Deaths_Meningitis`:`Deaths_AcuteHepatitis`, names_to = "causa", values_to = "muertes")
+```
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE}
+death_vih <- read.csv('number-of-deaths-from-hivaids-who.csv')%>%
+  as_tibble()%>%
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`, continent)), join_by(Code==`ISO_A3`))%>%
+  relocate(continent, .after=Entity) %>%
+  dplyr::rename(`Total_death` = `Total.deaths.from.hiv.aids.amongboth.sexes`)
+```
+
+```{r}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", 
+             "Colombia", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", 
+             "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
+            "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", 
+            "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", 
+            "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia", "Slovakia", 
+            "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", "India", 
+          "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", 
+          "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Palestine", "Philippines", 
+          "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", 
+          "Timor", "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", "Palau", 
+             "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", 
+            "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", 
+            "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", 
+            "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", 
+            "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+new_cases_vih <- read.xlsx('new-cases-of-hiv-infection.xlsx')%>%
+  as_tibble()%>%
+  dplyr::rename(new_cases = `Incidence.-.HIV/AIDS.-.Sex:.Both.-.Age:.All.Ages.(Number)`)%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", "Colombia", 
+             "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", 
+             "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", 
+            "Cyprus", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", "Hungary", 
+            "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", 
+            "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", 
+            "San Marino", "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", 
+            "United Kingdom")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", 
+          "Georgia", "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", 
+          "Kyrgyzstan", "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", 
+          "Oman", "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "South Korea", 
+          "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor", "Turkey", "Turkmenistan", "United Arab Emirates", 
+          "Uzbekistan", "Vietnam", "Yemen")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Democratic Republic of Congo", "Djibouti", 
+            "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Ivory Coast", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+            "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", 
+            "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", 
+            "South Sudan", "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", 
+             "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu")
+
+Gasto_público <- read.csv('health-expenditure-and-financing-per-capita (1).csv')%>%
+  as_tibble()%>%
+  dplyr::rename(`Health.expenditure` = `Health.expenditure.per.capita...Total`)%>%
+  mutate(Health.expenditure=as.numeric(Health.expenditure)) %>%
+  filter(Entity %in% c(america, europa, asia, africa, oceania)) %>% 
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% africa ~ "Africa",
+    Entity %in% oceania ~ "Oceania",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+
+```
+
+```{r,echo = FALSE,message = FALSE,warning = FALSE}
+poblacion <- read.xlsx('API_SP.POP.TOTL_DS2_es_excel_v2_4145.xlsx') %>%
+  as_tibble() %>%
+  pivot_longer(`1960`:`2023`, names_to = "Year", values_to = "value") %>%
+  dplyr::select(`Country.Code`, `Year`, `value`)%>%
+  mutate(Year = as.numeric(Year))
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", 
+             "Colombia", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", 
+             "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
+            "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", 
+            "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", "Netherlands", 
+            "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", "Serbia", "Slovakia", 
+            "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", "India", 
+          "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", "Laos", "Lebanon", 
+          "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", "Pakistan", "Palestine", "Philippines", 
+          "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", "Syria", "Taiwan", "Tajikistan", "Thailand", 
+          "Timor", "Turkmenistan", "United Arab Emirates", "Uzbekistan", "Vietnam", "Yemen")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", "Palau", 
+             "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", 
+            "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", "Mauritania", 
+            "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", 
+            "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", "Togo", 
+            "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+new_cases_vih <- read.xlsx('new-cases-of-hiv-infection.xlsx')%>%
+  as_tibble()%>%
+  dplyr::rename(new_cases = `Incidence.-.HIV/AIDS.-.Sex:.Both.-.Age:.All.Ages.(Number)`)%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Argentina", "Belize", "Bolivia", "Brazil", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominican Republic",
+             "Ecuador", "El Salvador", "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua",
+             "Paraguay", "Peru", "Trinidad and Tobago", "Uruguay", "Venezuela")
+
+europa <- c("France", "Georgia", "Ireland", "Italy", "Latvia", "Moldova", "Netherlands", "Romania", "Spain", "Sweden", "Ukraine")
+
+asia <- c("Afghanistan", "Azerbaijan", "Bangladesh", "Cambodia", "Indonesia", "Iran", "Kazakhstan", "Kyrgyzstan", 
+          "Laos", "Malaysia", "Myanmar", "Nepal", "Pakistan", "Philippines", "Saudi Arabia", "Tajikistan", "Thailand", "Vietnam", "Yemen")
+oceania <- c("Australia", "Papua New Guinea")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cameroon", "Cape Verde", 
+            "Central African Republic", "Chad", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", "Djibouti",
+            "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", "Guinea", 
+            "Guinea-Bissau", "Kenya", "Liberia", "Madagascar", "Malawi", "Mali", "Mauritania", "Morocco", 
+            "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", "Senegal", "Sierra Leone", "Somalia", "South Africa",
+            "South Sudan", "Sudan", "Tanzania", "Togo", "Uganda", "Zambia")
+
+
+Orphaned_aids <- read.csv('number-of-children-orphaned-from-aids.csv') %>%
+  as_tibble() %>%
+  mutate(`Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate` = as.numeric(`Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate`)) %>%
+  replace_na(list(`Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate` = 0)) %>%
+  dplyr::rename(AIDS.Orphans = `Children.orphaned.due.to.AIDS.deaths...Disaggregation..0.17.estimate`)%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+
+america <- c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia", "Brazil", "Canada", "Chile", 
+             "Colombia", "Costa Rica", "Cuba", "Dominica", "Dominican Republic", "Ecuador", "El Salvador", "Grenada", 
+             "Guatemala", "Guyana", "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", "Peru", 
+             "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", "Suriname", "Trinidad and Tobago", 
+             "United States", "Uruguay", "Venezuela", "Aruba", "Bermuda", "Cayman Islands", "Curacao", "French Guiana", 
+             "Guadeloupe", "Martinique", "Puerto Rico", "Saint Barthlemy", "Saint Martin (French part)", 
+             "Saint Pierre and Miquelon", "Sint Maarten (Dutch part)", "Turks and Caicos Islands", 
+             "British Virgin Islands", "United States Virgin Islands")
+
+europa <- c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", "Croatia", "Cyprus",
+            "Czechia", "Denmark", "Estonia", "Finland", "France", "Georgia", "Germany", "Greece", "Hungary", "Iceland", 
+            "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", "Moldova", "Monaco", "Montenegro", 
+            "Netherlands", "North Macedonia", "Norway", "Poland", "Portugal", "Romania", "Russia", "San Marino", 
+            "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Ukraine", "United Kingdom", 
+            "Gibraltar", "Vatican", "Isle of Man", "Faeroe Islands", "Greenland")
+
+asia <- c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei", "Cambodia", "China", 
+          "India", "Indonesia", "Iran", "Iraq", "Israel", "Japan", "Jordan", "Kazakhstan", "Kuwait", "Kyrgyzstan", 
+          "Laos", "Lebanon", "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "North Korea", "Oman", 
+          "Pakistan", "Palestine", "Philippines", "Qatar", "Saudi Arabia", "Singapore", "South Korea", "Sri Lanka", 
+          "Syria", "Taiwan", "Tajikistan", "Thailand", "Timor", "Turkmenistan", "United Arab Emirates", "Uzbekistan", 
+          "Vietnam", "Yemen", "Hong Kong", "Macao")
+
+oceania <- c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (country)", "Nauru", "New Zealand", "Palau", 
+             "Papua New Guinea", "Samoa", "Solomon Islands", "Tonga", "Tuvalu", "Vanuatu", "American Samoa", 
+             "Cook Islands", "French Polynesia", "Guam", "New Caledonia", "Niue", "Northern Mariana Islands", 
+             "Tokelau", "Wallis and Futuna")
+
+africa <- c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", "Cameroon", 
+            "Central African Republic", "Chad", "Comoros", "Congo", "Cote d'Ivoire", "Democratic Republic of Congo", 
+            "Djibouti", "Egypt", "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+            "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", "Malawi", "Mali", 
+            "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", "Niger", "Nigeria", "Rwanda", 
+            "Sao Tome and Principe", "Senegal", "Seychelles", "Sierra Leone", "Somalia", "South Africa", "South Sudan", 
+            "Sudan", "Tanzania", "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe", "Anguilla", "Mayotte", 
+            "Reunion", "Saint Helena", "Western Sahara", "Falkland Islands")
+
+life_expectancy <- read.xlsx('life-expectancy.xlsx')%>%
+  as_tibble() %>% 
+  mutate(Life.expectancy = gsub("\\.", "", Life.expectancy)) %>% 
+  mutate( Life.expectancy = paste0(substr(Life.expectancy, 1, 2), ".", substr(Life.expectancy, 2, length(Life.expectancy))))%>%
+  mutate(Life.expectancy = as.numeric(Life.expectancy))%>%
+  mutate(Region = case_when(
+    Entity %in% america ~ "America",
+    Entity %in% europa ~ "Europa",
+    Entity %in% asia ~ "Asia",
+    Entity %in% oceania ~ "Oceania",
+    Entity %in% africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity) %>% 
+  left_join((income.group%>%dplyr::select(`ISO_A3`, `WorldBank.income.group`)), join_by(Code==`ISO_A3`))%>%
+  relocate(`WorldBank.income.group`, .after=Region)
+
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+geoj <- geojson_read('https://ctim.es/AEDV/data/geo_countries.geojson',  what = "sp")
+geoj.tb <- geoj %>% as_tibble()
+```
+
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+nuevas_infecciones_niños_infecciones_paradas_por_PMTCT <- read.csv('number-of-new-hiv-child-infections-vs-number-of-infections-averted-due-to-pmtct (1).csv')%>%as_tibble()%>%rename(
+    infecciones_evitadas = `infections_averted_pmtct__disaggregation_estimate`,
+    nuevas_infecciones = `new_infections__disaggregation_children__0_14__estimate`
+  )
+```
+
+```{r}
+Africa = c("Algeria", "Angola", "Benin", "Botswana", "Burkina Faso", "Burundi", "Cabo Verde", 
+             "Cameroon", "Central African Republic", "Chad", "Comoros", "Congo", "Djibouti", "Egypt", 
+             "Equatorial Guinea", "Eritrea", "Eswatini", "Ethiopia", "Gabon", "Gambia", "Ghana", 
+             "Guinea", "Guinea-Bissau", "Kenya", "Lesotho", "Liberia", "Libya", "Madagascar", 
+             "Malawi", "Mali", "Mauritania", "Mauritius", "Morocco", "Mozambique", "Namibia", 
+             "Niger", "Nigeria", "Rwanda", "Sao Tome and Principe", "Senegal", "Seychelles", 
+             "Sierra Leone", "Somalia", "South Africa", "South Sudan", "Sudan", "Tanzania", 
+             "Togo", "Tunisia", "Uganda", "Zambia", "Zimbabwe")
+
+  America = c("Antigua and Barbuda", "Argentina", "Bahamas", "Barbados", "Belize", "Bolivia (Plurinational State of)", "Brazil", "Canada", "Chile", "Colombia", "Costa Rica", "Cuba", "Dominica", 
+              "Dominican Republic", "Ecuador", "El Salvador", "Grenada", "Guatemala", "Guyana", 
+              "Haiti", "Honduras", "Jamaica", "Mexico", "Nicaragua", "Panama", "Paraguay", 
+              "Peru", "Saint Kitts and Nevis", "Saint Lucia", "Saint Vincent and the Grenadines", 
+              "Suriname", "Trinidad and Tobago", "United States of America", "Uruguay", 
+              "Venezuela (Bolivarian Republic of)")
+
+  Asia = c("Afghanistan", "Armenia", "Azerbaijan", "Bahrain", "Bangladesh", "Bhutan", "Brunei Darussalam", 
+           "Cambodia", "China", "Cyprus", "Democratic People's Republic of Korea", "Georgia", "India", 
+           "Indonesia", "Iran (Islamic Republic of)", "Iraq", "Israel", "Japan", "Jordan", 
+           "Kazakhstan", "Kuwait", "Kyrgyzstan", "Lao People's Democratic Republic", "Lebanon", 
+           "Malaysia", "Maldives", "Mongolia", "Myanmar", "Nepal", "Oman", "Pakistan", "Philippines", 
+           "Qatar", "Republic of Korea", "Saudi Arabia", "Singapore", "Sri Lanka", "Syrian Arab Republic", 
+           "Tajikistan", "Thailand", "Timor-Leste", "Turkmenistan", "Uzbekistan", "Viet Nam", "Yemen")
+  
+  Europe = c("Albania", "Andorra", "Austria", "Belarus", "Belgium", "Bosnia and Herzegovina", "Bulgaria", 
+             "Croatia", "Czechia", "Denmark", "Estonia", "Finland", "France", "Germany", "Greece", 
+             "Hungary", "Iceland", "Ireland", "Italy", "Latvia", "Lithuania", "Luxembourg", "Malta", 
+             "Monaco", "Montenegro", "Netherlands", "North Macedonia", "Norway", "Poland", 
+             "Portugal", "Republic of Moldova", "Romania", "Russian Federation", "San Marino", 
+             "Serbia", "Slovakia", "Slovenia", "Spain", "Sweden", "Switzerland", "Turkey", 
+             "Ukraine", "United Kingdom of Great Britain and Northern Ireland")
+  
+  Oceania = c("Australia", "Fiji", "Kiribati", "Marshall Islands", "Micronesia (Federated States of)", 
+              "Nauru", "New Zealand", "Palau", "Papua New Guinea", "Samoa", "Solomon Islands", 
+              "Tonga", "Tuvalu", "Vanuatu")
+
+antiretroviral <- read.csv('data.csv') %>%
+  as_tibble() %>%
+  rename(
+    "value" = `Reported.number.of.people.receiving.antiretroviral.therapy`,
+    Entity = `Countries..territories.and.areas`
+  ) %>%
+  dplyr::select(Entity, Year, value) %>%
+  left_join(
+    income.group %>%
+      select(ISO_A3, country,  WorldBank.income.group),
+    by = c(`Entity` = "country")
+  ) %>%
+  mutate(value = as.numeric(value))%>%
+  mutate(Region = case_when(
+    Entity %in% America ~ "America",
+    Entity %in% Europe ~ "Europa",
+    Entity %in% Asia ~ "Asia",
+    Entity %in% Oceania ~ "Oceania",
+    Entity %in% Africa ~ "Africa",
+    TRUE ~ "Other"
+  ))%>%
+  relocate(Region, .after=Entity)%>%mutate(TAR = value)
+```
+ 
+```{r, echo = FALSE,message = FALSE,warning = FALSE}
+Atributos <- poblacion%>%left_join(life_expectancy%>%dplyr::select(Code, Year, Life.expectancy), join_by(Country.Code == Code, Year == Year))%>%rename(poblacion = value)%>%left_join(new_cases_vih%>%dplyr::select(Code, Year, new_cases), join_by(Country.Code == Code, Year == Year))%>%left_join(Orphaned_aids%>%dplyr::select(Code, Year, AIDS.Orphans), join_by(Country.Code == Code, Year == Year))%>%left_join(income.group%>%dplyr::select(ISO_A3, country, `WorldBank.income.group`), join_by(Country.Code == ISO_A3))%>%left_join(death_vih%>%dplyr::select(Code, Year, Total_death), join_by(Country.Code == Code, Year == Year))%>%left_join(Gasto_público%>%dplyr::select(Code, Year, Health.expenditure), join_by(Country.Code == Code, Year == Year))%>%relocate(country)%>%left_join(nuevas_infecciones_niños_infecciones_paradas_por_PMTCT%>%dplyr::select(Code, Year, infecciones_evitadas, nuevas_infecciones), join_by(Country.Code == Code, Year == Year))%>%left_join(antiretroviral%>%dplyr::select(ISO_A3, Year, TAR), join_by(Country.Code == ISO_A3, Year == Year))%>%arrange(Year)
+```
+
+```{r}
+Funding_to_support_efforts_against_HIV_AIDS <- read.csv('https://ourworldindata.org/grapher/hiv-expenditure.csv?v=1&csvType=full&useColumnShortNames=true')%>%as_tibble()%>%
+  filter(`domestic_spending_fund_source__disaggregation_total`>0)
+```
+
+
+
+Comparaciones
+=======================================================================
+
+Column {.sidebar data-width=255}
+--------------------------------------------
+
+### Panel de Selección de Parámetros
+
+```{r}
+
+tabsetPanel(
+  
+  tabPanel("Nuevas infecciones de VIH vs Infecciones evitadas por PMTCT", 
+    selectInput(
+      "Entity4", 
+      label = "Selecciona una Región", 
+      choices = unique(nuevas_infecciones_niños_infecciones_paradas_por_PMTCT$Entity), 
+      selected = "World"
+    )
+  ),
+
+  tabPanel("Porcentage de huérfanos por continentes",
+    selectInput(
+      "YEAR", 
+      label = "Selecciona un año", 
+      choices = sort(unique(Orphaned_aids$Year[Orphaned_aids$Year < 2019 & Orphaned_aids$Year > 2000])), 
+      selected = 2016
+    )
+  ),
+  tabPanel("Esperanza de vida",
+    selectInput(
+      "altabaja", 
+      label = "Selecciona un Tipo", 
+      choices = c("Altas", "Bajas", unique(life_expectancy$Entity))), 
+      selected = "Bajas"
+    )
+  )
+
+  
+```
+
+Column {.tabset data-width=650}
+--------------------------------------------
+### Nuevas infecciones de VIH vs Infecciones evitadas por PMTCT
+
+```{r}
+renderPlotly({
+  req(input$Entity4)
+  data_filtered <- nuevas_infecciones_niños_infecciones_paradas_por_PMTCT %>%
+    filter(Entity == input$Entity4)
+  
+ggplot(data_filtered, aes(x = Year)) +
+    geom_line(aes(y = infecciones_evitadas, color = "Infecciones evitadas por PMTCT")) +
+    geom_point(aes(y = infecciones_evitadas, color = "Infecciones evitadas por PMTCT")) +
+    geom_line(aes(y = nuevas_infecciones, color = "Nuevas infecciones de VIH")) +
+    geom_point(aes(y = nuevas_infecciones, color = "Nuevas infecciones de VIH")) +
+    labs(
+      title = paste("Nuevas infecciones vs Infecciones evitadas para", input$Entity4),
+      x = "Año",
+      y = "Número de infecciones",
+      color = "Leyenda"
+    ) +
+    scale_color_manual(
+      values = c(
+        "Infecciones evitadas por PMTCT" = "darkred", 
+        "Nuevas infecciones de VIH" = "red"
+      )
+    ) +
+    scale_y_continuous(labels = label_number(scale_cut = cut_short_scale())) + 
+    theme_minimal()
+})
+
+```
+
+### Huérfanos por Regiones por años por el VIH
+
+```{r}
+renderPlotly({
+
+  poblacion_2000 <- poblacion %>% 
+    filter(Year == input$YEAR)
+  
+  resultados <- Orphaned_aids %>%
+    filter(Year == input$YEAR) %>%
+    left_join(
+      poblacion_2000, 
+      by = c("Code" = "Country.Code", "Year" = "Year")
+    ) %>%
+    filter(Region != "Other") %>%
+    group_by(Region) %>%
+    summarise(
+      huerfanos = sum(na.omit(AIDS.Orphans)), 
+      total_poblacion = sum(value, na.rm = TRUE)
+    ) %>%
+    mutate(
+      porcentaje_huerfanos = huerfanos / total_poblacion,
+      etiquetas = paste0(
+        "Región: ", Region, "<br>",
+        "Casos: ", scales::comma(huerfanos), "<br>",
+        "Porcentaje: ", scales::percent(porcentaje_huerfanos, accuracy = 0.1)
+      )
+    )
+  
+  plot_ly(
+    resultados, 
+    labels = ~Region, 
+    values = ~porcentaje_huerfanos, 
+    type = 'pie',
+    textinfo = 'label+percent',
+    hoverinfo = 'text',
+    text = ~etiquetas, 
+    insidetextorientation = 'radial',
+    marker = list(colors = c("#F8968C", "#DD4636", "#EB6F5B", "#AD0B1E", "#9C0824"))
+  ) %>%
+    layout(
+      title = paste("Proporción de niños huérfanos por VIH en", input$YEAR),
+      showlegend = TRUE
+    )
+})
+
+```
+
+### Esperanza de vida
+
+```{r}
+renderPlotly({
+  if (input$altabaja == "Altas") {
+    # Selección de países con la esperanza de vida más alta
+    paises_seleccionados2 <- life_expectancy %>%
+      group_by(Entity) %>%
+      summarize(Life.expectancy = mean(Life.expectancy)) %>%
+      arrange(desc(Life.expectancy)) %>%
+      slice(1:6) %>%
+      pull(Entity)
+    
+    datos_filtrados2 <- life_expectancy %>%
+      filter(Entity %in% paises_seleccionados2)
+    
+    # Gráfico para países con esperanza de vida más alta
+    p2 <- ggplot(datos_filtrados2, aes(
+      x = Entity, y = Life.expectancy, fill = Entity,
+      text = sprintf("Año: %g\nEsperanza de vida: %.2f", Year, Life.expectancy)
+    )) +
+      geom_boxplot(show.legend = FALSE) +
+      geom_jitter(shape = 16, position = position_jitter(0.2), show.legend = FALSE) +
+      labs(
+        title = "Esperanza de vida más alta de los países",
+        x = "País",
+        y = "Esperanza de vida"
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 50, hjust = 1),
+        legend.position = "none"
+      ) +
+      scale_fill_manual(values = c(
+        "Channel Islands" = "#FF9999",
+        "Faeroe Islands" = "red",
+        "Hong Kong" = "#CC0000",
+        "Israel" = "#FF6665",
+        "Monaco" = "#990000",
+        "San Marino" = "darkred"
+      ))
+    
+    ggplotly(p2, tooltip = "text")
+    
+  } else if (input$altabaja == "Bajas") {
+    # Selección de países con la esperanza de vida más baja
+    paises_seleccionados1 <- life_expectancy %>%
+      group_by(Entity) %>%
+      summarize(Life.expectancy = mean(Life.expectancy)) %>%
+      arrange(Life.expectancy) %>%
+      slice(1:6) %>%
+      pull(Entity)
+    
+    datos_filtrados1 <- life_expectancy %>%
+      filter(Entity %in% paises_seleccionados1)
+    
+    # Gráfico para países con esperanza de vida más baja
+    p1 <- ggplot(datos_filtrados1, aes(
+      x = Entity, y = Life.expectancy, fill = Entity,
+      text = sprintf("Año: %g\nEsperanza de vida: %.2f", Year, Life.expectancy)
+    )) +
+      geom_boxplot(show.legend = FALSE) +
+      geom_jitter(shape = 16, position = position_jitter(0.2), show.legend = FALSE) +
+      labs(
+        title = "Esperanza de vida más baja de los países",
+        x = "País",
+        y = "Esperanza de vida"
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 50, hjust = 1),
+        legend.position = "none"
+      ) +
+      scale_fill_manual(values = c(
+        "Sierra Leone" = "#FF9999",
+        "Mali" = "red",
+        "South Sudan" = "#CC0000",
+        "Niger" = "#FF6665",
+        "Nigeria" = "#990000",
+        "Central African Republic" = "darkred"
+      ))
+    
+    ggplotly(p1, tooltip = "text")
+    
+  } else {
+    # Gráfico genérico si no es "Altas" ni "Bajas"
+    p3 <- ggplot(
+      life_expectancy %>% filter(Entity == input$altabaja),
+      aes(
+        x = Entity, y = Life.expectancy, fill = "red",
+        text = sprintf("Año: %g\nEsperanza de vida: %.2f", Year, Life.expectancy)
+      )
+    ) +
+      geom_boxplot(show.legend = FALSE) +
+      geom_jitter(shape = 16, position = position_jitter(0.2), show.legend = FALSE) +
+      labs(
+        title = paste("Esperanza de vida de", input$altabaja),
+        x = "País",
+        y = "Esperanza de vida"
+      ) +
+      theme_minimal() +
+      theme(
+        axis.text.x = element_text(angle = 50, hjust = 1),
+        legend.position = "none"
+      ) +
+      scale_fill_manual(values = c("red"))
+    
+    ggplotly(p3, tooltip = "text")
+  }
+})
+
+```
+
+ 
+ Gasto en Sanidad para VIH
+=======================================================================
+
+
+Column {.sidebar data-width=255}
+--------------------------------------------------
+```{r}
+# Selección de años en un solo selectInput, pero con múltiples opciones
+selectInput(
+  "Entity", 
+  label = "Selecciona 4 países", 
+  choices = unique(Funding_to_support_efforts_against_HIV_AIDS$Entity), 
+  selected = c("Venezuela", "Vietnam", "Spain", "China"), 
+  multiple = TRUE
+)
+```
+
+Column
+--------------------------------------------------
+###
+```{r}
+renderPlotly({
+  req(input$Entity[1]) # Verifica que haya un valor en input$Entity[1]
+  
+  # Filtra los datos para el primer año seleccionado
+  data_filtered <- Funding_to_support_efforts_against_HIV_AIDS %>%
+    filter(Entity == input$Entity[1]) %>%
+    filter(!is.na(domestic_spending_fund_source__disaggregation_total) & Year > 2000 & Year < 2020)
+  
+  # Verifica que hay datos después del filtro
+  req(nrow(data_filtered) > 0)
+  
+  # Crea el gráfico de ggplot
+  p <- ggplot(data_filtered, aes(
+    x = Year, 
+    y = domestic_spending_fund_source__disaggregation_total,
+    group = 1,
+    text = sprintf("País: %s\nGasto en sanidad para VIH: %g\nAño: %g", Entity, domestic_spending_fund_source__disaggregation_total, Year)
+  )) +
+    geom_line(color = "red", size = 1) +
+    scale_y_log10() +
+    ggtitle(paste("Gasto en Sanidad para VIH en", input$Entity[1])) +
+    labs(x = "Años", y = "Gasto (USD)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 50, hjust = 1))+
+    scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()))
+  
+  ggplotly(p, tooltip = "text")
+}) 
+
+
+```
+###
+```{r}
+renderPlotly({
+  req(input$Entity[2]) # Verifica que haya un valor en input$Entity[1]
+  
+  # Filtra los datos para el primer año seleccionado
+  data_filtered <- Funding_to_support_efforts_against_HIV_AIDS %>%
+    filter(Entity == input$Entity[2]) %>%
+    filter(!is.na(`domestic_spending_fund_source__disaggregation_total`) & Year > 2000 & Year < 2020)
+  
+  # Verifica que hay datos después del filtro
+  req(nrow(data_filtered) > 0)
+  
+  # Crea el gráfico de ggplot
+  p <- ggplot(data_filtered, aes(
+    x = Year, 
+    y = `domestic_spending_fund_source__disaggregation_total`,
+    group = 1,
+    text = sprintf("País: %s\nGasto en sanidad para VIH: %g\nAño: %g", Entity, domestic_spending_fund_source__disaggregation_total, Year)
+  )) +
+    geom_line(color = "red", size = 1) + 
+    scale_y_log10() +
+    ggtitle(paste("Gasto en Sanidad para VIH en", input$Entity[2])) +
+    labs(x = "Años", y = "Gasto (USD)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 50, hjust = 1))+
+    scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()))
+  
+  ggplotly(p, tooltip = "text")
+})
+```
+
+Column
+--------------------------------------------------
+###
+```{r}
+renderPlotly({
+  req(input$Entity[3]) # Verifica que haya un valor en input$Entity[1]
+  
+  # Filtra los datos para el primer año seleccionado
+  data_filtered <- Funding_to_support_efforts_against_HIV_AIDS %>%
+    filter(Entity == input$Entity[3]) %>%
+    filter(!is.na(`domestic_spending_fund_source__disaggregation_total`) & Year > 2000 & Year < 2020)
+  
+  # Verifica que hay datos después del filtro
+  req(nrow(data_filtered) > 0)
+  
+  # Crea el gráfico de ggplot
+  p <- ggplot(data_filtered, aes(
+    x = Year, 
+    y = `domestic_spending_fund_source__disaggregation_total`,
+    group = 1,
+    text = sprintf("País: %s\nGasto en sanidad para VIH: %g\nAño: %g", Entity, domestic_spending_fund_source__disaggregation_total, Year)
+  )) +
+    geom_line(color = "red", size = 1) + 
+    scale_y_log10() +
+    ggtitle(paste("Gasto en Sanidad para VIH en", input$Entity[3])) +
+    labs(x = "Años", y = "Gasto (USD)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 50, hjust = 1))+
+    scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()))
+  
+  ggplotly(p, tooltip = "text")
+})
+```
+###
+```{r}
+renderPlotly({
+  req(input$Entity[4]) # Verifica que haya un valor en input$Entity[1]
+  
+  # Filtra los datos para el primer año seleccionado
+  data_filtered <- Funding_to_support_efforts_against_HIV_AIDS %>%
+    filter(Entity == input$Entity[4]) %>%
+    filter(!is.na(`domestic_spending_fund_source__disaggregation_total`) & Year > 2000 & Year < 2020)
+  
+  # Verifica que hay datos después del filtro
+  req(nrow(data_filtered) > 0)
+  
+  # Crea el gráfico de ggplot
+  p <- ggplot(data_filtered, aes(
+    x = Year, 
+    y = `domestic_spending_fund_source__disaggregation_total`,
+    group = 1, 
+    text = sprintf("País: %s\nGasto en sanidad para VIH: %g\nAño: %g", Entity, domestic_spending_fund_source__disaggregation_total, Year)
+  )) +
+    geom_line(color = "red", size = 1) +
+    scale_y_log10() +
+    ggtitle(paste("Gasto en Sanidad para VIH en", input$Entity[4])) +
+    labs(x = "Años", y = "Gasto (USD)") +
+    theme_minimal() +
+    theme(axis.text.x = element_text(angle = 50, hjust = 1))+
+    scale_y_continuous(labels = label_number(scale_cut = cut_short_scale()))
+  
+  ggplotly(p, tooltip = "text")
+})
+```
+
+
+Comparación atributos
+=======================================================================
+
+Column {.sidebar data-width=230}
+--------------------------------------------------
+
+```{r}
+selectInput(
+  "year", 
+  label = "select Year:",
+  choices = sort(unique(Atributos$Year[Atributos$Year >= 1990 & Atributos$Year <= 2019])),
+selected = 2015
+)
+
+selectInput(
+  "x", 
+  label = "Indicator 1:",
+  choices = c("poblacion","Life.expectancy","new_cases","AIDS.Orphans","Total_death","Health.expenditure","infecciones_evitadas","nuevas_infecciones", "TAR"), 
+selected = colnames(Atributos)[-(1:3)][6]
+)
+
+selectInput(
+  "x_scale", 
+  label = "Scale Transform Indicator 1:",
+  choices = c("none", "sqrt", "log"), 
+selected = "sqrt"
+)
+
+selectInput(
+  "y", 
+  label = "Indicator 2:",
+  choices = c("poblacion","Life.expectancy","new_cases","AIDS.Orphans","Total_death","Health.expenditure","infecciones_evitadas","nuevas_infecciones", "TAR"), 
+selected = colnames(Atributos)[-(1:3)][3]
+)
+
+selectInput(
+  "y_scale", 
+  label = "Scale Transform Indicator 2:",
+  choices = c("none", "log", "boxcox"), 
+selected = "boxcox"
+)
+```
+
+```{r}
+# Función reactive que calcula los indicadores seleccionados escalados
+# en su caso, la transformación Box-Cox entre ellos y
+# la regresión lineal del resultado.
+# Devuelve una lista con todo lo calculado
+inputs.processing <- reactive({
+  tb <-  Atributos %>%
+    dplyr::select(country, Year, x = all_of(input$x), y = all_of(input$y)) %>%
+    filter(Year == input$year) %>%
+    na.omit()
+  
+  # Escalamos los indicadores de acuerdo con los parámetros de escalado   
+  if(input$x_scale == "sqrt") tb$x <- sqrt(tb$x)
+  if(input$x_scale == "log") tb$x <- log(tb$x)  
+  if(input$y_scale == "log") tb$y <- log(tb$y)  
+  
+  lambda <- 1  
+  if(input$y_scale == "boxcox") {
+    bc <- MASS::boxcox(y ~ x, data = tb) # Cálculo óptimo modelo Box-Cox 
+    lambda <- round(bc$x[which.max(bc$y)], digits = 4)
+    if(lambda != 0) {
+      tb$y <- tb$y^lambda / lambda
+    } else {
+      tb$y <- log(tb$y)
+    }
+  }
+  
+  # Cálculo regresión lineal después del escalado de las variables. 
+  fit <- lm(y ~ x, data = tb)
+  
+  # Devolvemos una lista con todo lo calculado 
+  return(list(tb = tb, fit = fit, lambda = lambda))
+})
+
+``` 
+
+### 
+
+```{r}
+# Imprimimos en formato HTML los resultados del análisis de regresión 
+# de los indicadores seleccionados escalados
+shiny::renderUI({
+  
+  # Capturamos el resultado del procesado de los inputs 
+  tb <- inputs.processing()$tb
+  fit <- inputs.processing()$fit
+  lambda <- inputs.processing()$lambda
+  
+  # Imprimimos el resultado en formato HTML 
+  text <- paste(
+    "<strong>LINEAR REGRESSION ANALYSIS</strong> <br>",
+    "<strong>Formula: y = ax + b </strong><br>",
+    "<strong>x: Indicator 1 scaled </strong><br>",
+    "<strong>y: Indicator 2 scaled </strong><br>",
+    "<strong><br>RESULTS</strong><br>",
+    "<strong>Correlation:</strong>", round(cor(tb$x, tb$y), digits = 4),
+    "<br><strong>Slope (a):</strong>", formatC(fit$coefficients[2], format = "e", digits = 2),
+    "<br><strong>Intercept (b):</strong>", formatC(fit$coefficients[1], format = "e", digits = 2)
+  )
+  
+  if(input$y_scale == "boxcox") {
+    text <- paste(text, "<br><strong>Lambda (Box-Cox):</strong>", formatC(lambda, format = "e", digits = 2))
+  }
+  
+  HTML(text)
+})
+
+```
+
+
+Column
+--------------------------------------------------
+
+### Scaled Indicators Comparison
+
+```{r} 
+# Diagrama de dispersión de los indicadores seleccionados escalados 
+# Con la recta de regresión 
+renderPlotly({
+  
+  # Capturamos el resultado del procesado de los inputs 
+  tb <- inputs.processing()$tb
+  
+  # Dibujamos el diagrama de dispersión 
+  tb %>%
+    ggplot(aes(x, y, label = country)) + 
+    geom_point() +
+    theme(legend.position = "none") +
+    labs(x = input$x, y = input$y) +
+    geom_smooth(method = "lm", se = FALSE) 
+})
+
+```
+
+Column {data-width=300}
+--------------------------------------------------
+
+### Scaled Indicator Values
+
+```{r}
+renderTable({
+  # Captura del resultado del procesamiento de inputs
+  tb <- inputs.processing()$tb
+  
+  # Verificación de datos antes de mostrar la tabla
+  if (nrow(tb) == 0) {
+    return(data.frame(
+      Message = "No data available for the selected inputs."
+    ))
+  }
+  
+  # Ordenamiento y formato de los datos para mostrar en la tabla
+  tb %>% 
+    arrange(desc(x)) %>% 
+    mutate(
+      Year = as.integer(Year),  # Convierte el año a entero para eliminar los decimales
+      x = prettyNum(round(x, digits = 2), big.mark = ","),
+      y = prettyNum(round(y, digits = 2), big.mark = ",")
+    ) %>%
+    dplyr::select(Year, country, x, y)
+})
+
+```
+
+Muertes por Causa
+=======================================================================
+
+
+Column {.sidebar data-width=255}
+--------------------------------------------------
+
+
+```{r}
+selectInput(
+  "causa", 
+  label = "Selecciona causa:" , 
+  choices = sort(unique(numero_de_muertes_por_causa$causa)), 
+  selected = "Deaths_HIV_AIDS"
+)
+```
+
+```{r}
+selectInput(
+  "Year", 
+  label = "Seleciona año:", 
+  choices = sort(unique(numero_de_muertes_por_causa$Year)), 
+  selected = "2019"
+)
+```
+
+```{r}
+selectInput(
+  "percapita", 
+  label = "Tipo:", 
+  choices = c("muertes", "muertes_percápita"), 
+  selected = "muertes"
+)
+```
+
+
+```{r}
+numero_de_muertes_por_causa<-numero_de_muertes_por_causa%>%left_join(poblacion, join_by("Code"=="Country.Code", "Year"=="Year"))%>%mutate("muertes_percápita"=muertes/value * 1e5)%>%select(-value)
+inputs.processing1 <- reactive({
+  if(input$percapita == "muertes"){
+  tb1 <- numero_de_muertes_por_causa %>%
+  filter(causa == input$causa & Year == input$Year & !Region == "Other") %>% 
+  dplyr::select(Entity, Code, value=muertes)
+  } else {
+  tb1 <- numero_de_muertes_por_causa %>%
+  filter(causa == input$causa & Year == input$Year & !Region == "Other") %>% 
+  dplyr::select(Entity, Code, value=`muertes_percápita`)
+  }
+  
+ return(tb1)
+  
+})
+```
+
+
+
+```{r}
+renderTable({
+ 
+ causas_muerte_filtrada <- inputs.processing1()   
+  
+ causas_muerte_filtrada%>% 
+ mutate(value=prettyNum(round(value,digits=2), big.mark = ","))%>%select(-Code)
+  
+})
+```
+
+
+Column
+--------------------------------------------------
+
+###
+
+```{r} 
+leaflet::renderLeaflet({
+
+  # Capturamos el procesado de inputs de la primera ventana
+  causas_muerte_filtrada <- inputs.processing1()  
+  
+  geoj.tb.causas_muerte_filtrada <- geoj.tb %>% 
+    left_join(causas_muerte_filtrada, join_by("ISO_A3" == "Code"))
+
+  data <- geoj.tb.causas_muerte_filtrada$value
+  pal <- colorQuantile("Reds", data, n = 9)
+  legend.title <- input$causa
+  
+  # Construcción de etiquetas 
+  etiquetas <- paste(
+    "<strong> ",
+    geoj.tb$ADMIN,
+    "</strong><br>",
+    legend.title, 
+    ": ",
+    prettyNum(round(data, digits = 2), big.mark = ",", scientific = FALSE)
+  ) %>% lapply(htmltools::HTML)
+
+  # Dibujamos el mapa 
+  geoj %>%
+    leaflet() %>%  
+    setView(lng = 25, lat = 22, zoom = 2) %>% 
+    addPolygons(
+      fillColor = ~pal(data), 
+      weight = 2,
+      opacity = 1,
+      color = "white",
+      dashArray = "3",
+      fillOpacity = 0.7,
+      highlightOptions = highlightOptions( 
+        weight = 2,
+        color = rgb(0.2, 0.2, 0.2),
+        dashArray = "",
+        fillOpacity = 0.7,
+        bringToFront = TRUE
+      ),
+      label = etiquetas 
+    ) %>% 
+    addLegend("bottomleft", pal = pal, values = data,
+      title = legend.title,
+      labFormat = function(type, cuts, p) {
+        n = length(cuts) 
+        x = (cuts[-n] + cuts[-1]) / 2
+        x = prettyNum(round(x, digits = 2), big.mark = ",", scientific = FALSE)
+        as.character(x)
+      },
+      opacity = 1
+    )
+})
+
+```
+
+
+Predicciones
+=======================================================================
+
+Column {.sidebar data-width=255}
+--------------------------------------------
+
+### Panel de Selección de Parámetros
+
+```{r}
+tabsetPanel(
+  
+  tabPanel("Nuevos Casos de VIH", 
+    selectInput(
+      "Entity1", 
+      label = "País 1:", 
+      choices = sort(unique(new_cases_vih$Entity)), 
+      selected = "Spain"
+    ),
+    selectInput(
+      "Entity2", 
+      label = "País 2:", 
+      choices = sort(unique(new_cases_vih$Entity)), 
+      selected = "South Africa"
+    ),
+    shiny::sliderInput(
+      "valor",
+      label = "Seleccionar años a predecir:",
+      min = 2,
+      max = 10,
+      value = 5
+    ),
+    shiny::sliderInput(
+      "valor_arima",
+      label = "Rango histórico (años) para ARIMA:",
+      min = 5,
+      max = 20,
+      value = 20
+    )
+  ),
+
+  tabPanel("Huérfanos por VIH",
+    selectInput(
+      "Entity1_aids", 
+      label = "País 1:", 
+      choices = sort(unique(Orphaned_aids$Entity)), 
+      selected = "Belgium"
+    ),
+    selectInput(
+      "Entity2_aids", 
+      label = "País 2:", 
+      choices = sort(unique(Orphaned_aids$Entity)), 
+      selected = "Cambodia"
+    ),
+    shiny::sliderInput(
+      "valor1",
+      label = "Seleccionar años a predecir:",
+      min = 2,
+      max = 10,
+      value = 5
+    ),
+    shiny::sliderInput(
+      "valor1_arima",
+      label = "Rango histórico (años) para ARIMA:",
+      min = 5,
+      max = 20,
+      value = 20
+    )
+  ),
+  
+  tabPanel("Muertes por Causas",
+    selectInput(
+      "Entity1_causas", 
+      label = "País 1:", 
+      choices = sort(unique(numero_de_muertes_por_causa$Entity)), 
+      selected = "Spain"
+    ),
+    selectInput(
+      "Causa1_causas", 
+      label = "Causa 1:", 
+      choices = sort(unique(numero_de_muertes_por_causa$causa)), 
+      selected = "Deaths_Meningitis"
+    ),
+    selectInput(
+      "Entity2_causas", 
+      label = "País 2:", 
+      choices = sort(unique(numero_de_muertes_por_causa$Entity)), 
+      selected = "South Africa"
+    ),
+    selectInput(
+      "Causa2_causas", 
+      label = "Causa 2:", 
+      choices = sort(unique(numero_de_muertes_por_causa$causa)), 
+      selected = "Deaths_Meningitis"
+    ),
+    shiny::sliderInput(
+      "valor2",
+      label = "Seleccionar años a predecir:",
+      min = 2,
+      max = 10,
+      value = 5
+    ),
+    shiny::sliderInput(
+      "valor2_arima",
+      label = "Rango histórico (años) para ARIMA:",
+      min = 5,
+      max = 20,
+      value = 20
+    )
+  ),
+  
+  tabPanel("Gasto en Sanidad",
+    selectInput(
+      "Entity1_gasto", 
+      label = "País 1:", 
+      choices = sort(unique(Gasto_público$Entity)), 
+      selected = "Spain"
+    ),
+    selectInput(
+      "Entity2_gasto", 
+      label = "País 2:", 
+      choices = sort(unique(Gasto_público$Entity)), 
+      selected = "Turkey"
+    ),
+    shiny::sliderInput(
+      "valor3",
+      label = "Seleccionar años a predecir:",
+      min = 2,
+      max = 10,
+      value = 5
+    ),
+    shiny::sliderInput(
+      "valor3_arima",
+      label = "Rango histórico (años) para ARIMA:",
+      min = 5,
+      max = 20,
+      value = 20
+    )
+  ),
+  
+  tabPanel("Esperanza de Vida",
+    selectInput(
+      "grupo1", 
+      label = "Grupo de ingresos 1:", 
+      choices = sort(unique(life_expectancy$`WorldBank.income.group`)), 
+      selected = "High income"
+    ),
+    selectInput(
+      "grupo2", 
+      label = "Grupo de ingresos 2:", 
+      choices = sort(unique(life_expectancy$`WorldBank.income.group`)), 
+      selected = "Low income"
+    ),
+    shiny::sliderInput(
+      "valor4",
+      label = "Seleccionar años a predecir:",
+      min = 2,
+      max = 10,
+      value = 5
+    )
+  )
+)
+```
+
+Column {.tabset data-width=650}
+--------------------------------------------
+### Nuevos casos de VIH - Predicciones
+
+```{r}
+renderPlot({
+  max_year1 <- max(new_cases_vih$Year)
+  if (input$valor_arima == 20) {
+    new_cases_vih_cleaned_1 <- new_cases_vih %>%
+      filter(Entity == input$Entity1)
+  } else {
+    min_year1 <- max_year1 - input$valor_arima + 1
+    new_cases_vih_cleaned_1 <- new_cases_vih %>%
+      filter(Entity == input$Entity1, Year >= min_year1)
+  }
+  
+  new_cases_vih_ts_1 <- as_tsibble(
+    new_cases_vih_cleaned_1, 
+    index = Year, 
+    key = Entity
+  )
+  
+  new_cases_vih_ARIMA_1 <- new_cases_vih_ts_1 %>%
+    model(ARIMA(new_cases))
+  
+  new_cases_vih_ARIMA_prediccion_1 <- new_cases_vih_ARIMA_1 %>%
+    forecast(h = input$valor)
+  
+  p1 <- new_cases_vih_ARIMA_prediccion_1 %>%
+    autoplot(new_cases_vih_ts_1) + 
+    labs(title = paste("Predicción de Nuevos Casos de VIH en", input$Entity1), 
+         x = "Año", y = "Nuevos Casos") +
+    theme_minimal()
+  
+  max_year2 <- max(new_cases_vih$Year)
+  if (input$valor_arima == 20) {
+    new_cases_vih_cleaned_2 <- new_cases_vih %>%
+      filter(Entity == input$Entity2)
+  } else {
+    min_year2 <- max_year2 - input$valor_arima + 1
+    new_cases_vih_cleaned_2 <- new_cases_vih %>%
+      filter(Entity == input$Entity2, Year >= min_year2)
+  }
+  
+  new_cases_vih_ts_2 <- as_tsibble(
+    new_cases_vih_cleaned_2, 
+    index = Year, 
+    key = Entity
+  )
+  
+  new_cases_vih_ARIMA_2 <- new_cases_vih_ts_2 %>%
+    model(ARIMA(new_cases))
+  
+  new_cases_vih_ARIMA_prediccion_2 <- new_cases_vih_ARIMA_2 %>%
+    forecast(h = input$valor)
+  
+  p2 <- new_cases_vih_ARIMA_prediccion_2 %>%
+    autoplot(new_cases_vih_ts_2) + 
+    labs(title = paste("Predicción de Nuevos Casos de VIH en", input$Entity2), 
+         x = "Año", y = "Nuevos Casos") +
+    theme_minimal()
+  
+  wrap_plots(p1, p2, ncol = 1, nrow = 2)
+})
+
+
+```
+
+
+### Huérfanos por VIH - Predicciones
+
+```{r}
+renderPlot({
+  max_year1 <- max(Orphaned_aids$Year)
+  if (input$valor1_arima == 20) {
+    Orphaned_aids_cleaned_1 <- Orphaned_aids %>%
+      filter(Entity == input$Entity1_aids)
+  } else {
+    min_year1 <- max_year1 - input$valor1_arima + 1
+    Orphaned_aids_cleaned_1 <- Orphaned_aids %>%
+      filter(Entity == input$Entity1_aids, Year >= min_year1)
+  }
+  
+  Orphaned_aids_ts_1 <- as_tsibble(
+    Orphaned_aids_cleaned_1, 
+    index = Year, 
+    key = Entity
+  )
+  
+  Orphaned_aids_ARIMA_1 <- Orphaned_aids_ts_1 %>%
+    model(ARIMA(AIDS.Orphans))
+  
+  Orphaned_aids_ARIMA_prediccion_1 <- Orphaned_aids_ARIMA_1 %>%
+    forecast(h = input$valor1)
+  
+  p1 <- Orphaned_aids_ARIMA_prediccion_1 %>%
+    autoplot(Orphaned_aids_ts_1) + 
+    labs(title = paste("Predicción de huérfanos por VIH en", input$Entity1_aids), 
+         x = "Año", y = "Nº de huérfanos") +
+    theme_minimal()
+
+  max_year2 <- max(Orphaned_aids$Year)
+  if (input$valor1_arima == 20) {
+    Orphaned_aids_cleaned_2 <- Orphaned_aids %>%
+      filter(Entity == input$Entity2_aids)
+  } else {
+    min_year2 <- max_year2 - input$valor1_arima + 1
+    Orphaned_aids_cleaned_2 <- Orphaned_aids %>%
+      filter(Entity == input$Entity2_aids, Year >= min_year2)
+  }
+  
+  Orphaned_aids_ts_2 <- as_tsibble(
+    Orphaned_aids_cleaned_2, 
+    index = Year, 
+    key = Entity
+  )
+  
+  Orphaned_aids_ARIMA_2 <- Orphaned_aids_ts_2 %>%
+    model(ARIMA(AIDS.Orphans))
+  
+  Orphaned_aids_ARIMA_prediccion_2 <- Orphaned_aids_ARIMA_2 %>%
+    forecast(h = input$valor1)
+  
+  p2 <- Orphaned_aids_ARIMA_prediccion_2 %>%
+    autoplot(Orphaned_aids_ts_2) + 
+    labs(title = paste("Predicción de huérfanos por VIH en", input$Entity2_aids), 
+         x = "Año", y = "Nº de huérfanos") +
+    theme_minimal()
+  
+  wrap_plots(p1, p2, ncol = 1, nrow = 2)
+})
+
+```
+
+### Muertes por causas - Predicciones
+
+```{r}
+renderPlot({
+
+  max_year1 <- max(numero_de_muertes_por_causa$Year)
+  if (input$valor2_arima == 20) {
+    muertes_causa_cleaned_1 <- numero_de_muertes_por_causa %>%
+      filter(Entity == input$Entity1_causas & causa == input$Causa1_causas)
+  } else {
+    min_year1 <- max_year1 - input$valor2_arima + 1
+    muertes_causa_cleaned_1 <- numero_de_muertes_por_causa %>%
+      filter(Entity == input$Entity1_causas & causa == input$Causa1_causas & Year >= min_year1)
+  }
+  
+  muertes_causa_ts_1 <- as_tsibble(
+    muertes_causa_cleaned_1, 
+    index = Year, 
+    key = causa
+  )
+  
+  muertes_causa_ARIMA_1 <- muertes_causa_ts_1 %>%
+    model(ARIMA(muertes))
+  
+  muertes_causa_ARIMA_prediccion_1 <- muertes_causa_ARIMA_1 %>%
+    forecast(h = input$valor2)
+  
+  p1 <- muertes_causa_ARIMA_prediccion_1 %>%
+    autoplot(muertes_causa_ts_1) + 
+    labs(title = paste("Predicción de muertes por", input$Causa1_causas, "en", input$Entity1_causas), 
+         x = "Año", y = "Muertes") +
+    theme_minimal()
+
+  max_year2 <- max(numero_de_muertes_por_causa$Year)
+  if (input$valor2_arima == 20) {
+    muertes_causa_cleaned_2 <- numero_de_muertes_por_causa %>%
+      filter(Entity == input$Entity2_causas & causa == input$Causa2_causas)
+  } else {
+    min_year2 <- max_year2 - input$valor2_arima + 1
+    muertes_causa_cleaned_2 <- numero_de_muertes_por_causa %>%
+      filter(Entity == input$Entity2_causas & causa == input$Causa2_causas & Year >= min_year2)
+  }
+  
+  muertes_causa_ts_2 <- as_tsibble(
+    muertes_causa_cleaned_2, 
+    index = Year, 
+    key = causa
+  )
+  
+  muertes_causa_ARIMA_2 <- muertes_causa_ts_2 %>%
+    model(ARIMA(muertes))
+  
+  muertes_causa_ARIMA_prediccion_2 <- muertes_causa_ARIMA_2 %>%
+    forecast(h = input$valor2)
+  
+  p2 <- muertes_causa_ARIMA_prediccion_2 %>%
+    autoplot(muertes_causa_ts_2) + 
+    labs(title = paste("Predicción de muertes por", input$Causa2_causas, "en", input$Entity2_causas), 
+         x = "Año", y = "Muertes") +
+    theme_minimal()
+  
+  wrap_plots(p1, p2, ncol = 1, nrow = 2)
+})
+
+
+```
+
+
+### Gasto en Sanidad - Predicciones
+
+```{r}
+renderPlot({
+  
+  max_year1 <- max(Gasto_público$Year)
+  if (input$valor3_arima == 20) {
+    gasto_cleaned_1 <- Gasto_público %>%
+      filter(Entity == input$Entity1_gasto)
+  } else {
+    min_year1 <- max_year1 - input$valor3_arima + 1
+    gasto_cleaned_1 <- Gasto_público %>%
+      filter(Entity == input$Entity1_gasto & Year >= min_year1)
+  }
+  
+  gasto_ts_1 <- as_tsibble(
+    gasto_cleaned_1, 
+    index = Year, 
+    key = Entity
+  )
+  
+  gasto_ARIMA_1 <- gasto_ts_1 %>%
+    model(ARIMA(Health.expenditure))
+  
+  gasto_ARIMA_prediccion_1 <- gasto_ARIMA_1 %>%
+    forecast(h = input$valor3)
+  
+  p1 <- gasto_ARIMA_prediccion_1 %>%
+    autoplot(gasto_ts_1) + 
+    labs(title = paste("Predicción de Gasto en Sanidad en", input$Entity1_gasto), 
+         x = "Año", y = "Gasto en Sanidad") +
+    theme_minimal()
+  
+  max_year2 <- max(Gasto_público$Year)
+  if (input$valor3_arima == 20) {
+    gasto_cleaned_2 <- Gasto_público %>%
+      filter(Entity == input$Entity2_gasto)
+  } else {
+    min_year2 <- max_year2 - input$valor3_arima + 1
+    gasto_cleaned_2 <- Gasto_público %>%
+      filter(Entity == input$Entity2_gasto & Year >= min_year2)
+  }
+  
+  gasto_ts_2 <- as_tsibble(
+    gasto_cleaned_2, 
+    index = Year, 
+    key = Entity
+  )
+  
+  gasto_ARIMA_2 <- gasto_ts_2 %>%
+    model(ARIMA(Health.expenditure))
+  
+  gasto_ARIMA_prediccion_2 <- gasto_ARIMA_2 %>%
+    forecast(h = input$valor3)
+  
+  p2 <- gasto_ARIMA_prediccion_2 %>%
+    autoplot(gasto_ts_2) + 
+    labs(title = paste("Predicción de Gasto en Sanidad en", input$Entity2_gasto), 
+         x = "Año", y = "Gasto en Sanidad") +
+    theme_minimal()
+  
+  wrap_plots(p1, p2, ncol = 1, nrow = 2)
+})
+
+```
+
+
+### Esperanza de vida - Predicciones
+
+```{r}
+
+renderPlot({
+
+  # Grupo 1
+  life_expectancy_ts_1 <- life_expectancy %>%
+    filter(Year >= 2000, `WorldBank.income.group` == input$grupo1) %>%
+    group_by(Year) %>%
+    summarise(
+      Life.expectancy = mean(na.omit(`Life.expectancy`), na.rm = TRUE),
+      .groups = "drop"
+    ) %>% 
+    as_tsibble(
+      index = Year
+    )
+  
+  # Modelo ARIMA para Grupo 1
+  life_expectancy_ARIMA_1 <- life_expectancy_ts_1 %>%
+    fill_gaps() %>%
+    model(ARIMA(Life.expectancy))
+  
+  # Predicciones para Grupo 1
+  life_expectancy_ARIMA_prediccion_1 <- life_expectancy_ARIMA_1 %>%
+    forecast(h = as.numeric(input$valor4))
+  
+  # Gráfico de predicción para Grupo 1
+  p1 <- life_expectancy_ARIMA_prediccion_1 %>%
+    autoplot(life_expectancy_ts_1) + 
+    labs(
+      title = paste0("Predicción de Esperanza de Vida en ", input$grupo1, " a ", input$valor4, " años"),
+      x = "Año", 
+      y = "Esperanza de vida"
+    ) +
+    theme_minimal()
+  
+  # Grupo 2
+  life_expectancy_ts_2 <- life_expectancy %>%
+    filter(Year >= 2000, `WorldBank.income.group` == input$grupo2) %>%
+    group_by(Year) %>%
+    summarise(
+      Life.expectancy = mean(na.omit(`Life.expectancy`), na.rm = TRUE),
+      .groups = "drop"
+    ) %>% 
+    as_tsibble(
+      index = Year
+    )
+  
+  # Modelo ARIMA para Grupo 2
+  life_expectancy_ARIMA_2 <- life_expectancy_ts_2 %>%
+    fill_gaps() %>%
+    model(ARIMA(Life.expectancy))
+  
+  # Predicciones para Grupo 2
+  life_expectancy_ARIMA_prediccion_2 <- life_expectancy_ARIMA_2 %>%
+    forecast(h = as.numeric(input$valor4))
+  
+  # Gráfico de predicción para Grupo 2
+  p2 <- life_expectancy_ARIMA_prediccion_2 %>%
+    autoplot(life_expectancy_ts_2) + 
+    labs(
+      title = paste0("Predicción de Esperanza de Vida en ", input$grupo2, " a ", input$valor4, " años"),
+      x = "Año", 
+      y = "Esperanza de vida"
+    ) +
+    theme_minimal()
+  
+  # Combinar los gráficos de ambos grupos
+  wrap_plots(p1, p2, ncol = 1, nrow = 2)
+})
+
+```
+
+Matriz de correlación
+=================================
+
+Column {.sidebar data-width=255}
+--------------------------------------------
+```{r}
+shiny::selectInput(
+  "year2", 
+  label = "YEAR", 
+  choices = c("Last",sort(unique(Atributos$Year[Atributos$Year < 2020 & Atributos$Year > 1999]))), 
+  selected = "Last"
+)
+```
+
+```{r}
+inputs.processing2 <- shiny::reactive({
+  tb2 <- Atributos %>%
+    rename(
+      country = "country",
+      Country.Code = "Country.Code",
+      Year = "Year",
+      poblacion = "poblacion",
+      `Esperanza de vida` = "Life.expectancy",
+      `Nuevos casos SIDA` = "new_cases",
+      `Huerfanos por SIDA` = "AIDS.Orphans",
+      `Grupo de ingresos` = "WorldBank.income.group",
+      `Muertes por VIH` = "Total_death",
+      `Gasto en sanidad` = "Health.expenditure",
+      `Infecciones evitadas PMTCT` = "infecciones_evitadas",
+      `Nuevas infecciones` = "nuevas_infecciones",
+      `Personas con Tar` = `TAR`
+    ) %>%
+    pivot_longer(
+      cols = c(poblacion, `Esperanza de vida`, `Nuevos casos SIDA`, `Huerfanos por SIDA`, 
+               `Muertes por VIH`, `Gasto en sanidad`, `Infecciones evitadas PMTCT`, `Personas con Tar`),
+      names_to = "atributos",
+      values_to = "value"
+    ) %>%
+    dplyr::select(Year, country, atributos, value)%>%filter(!is.na(country))
+
+  if (input$year2 == "Last") {
+    tb2 <- tb2 %>%
+      group_by(country, atributos) %>%
+      summarise(value = last(na.omit(value)), .groups = "drop")
+  } else {
+    tb2 <- tb2 %>%
+      filter(Year == input$year2) %>%
+      dplyr::select(-Year)
+  }
+
+  tb2 <- tb2 %>%
+    pivot_wider(names_from = atributos, values_from = value) %>%
+    filter(!is.na(country))
+
+
+
+  pca <- tb2%>%
+    column_to_rownames(var="country") %>%
+   na.omit() %>%
+   prcomp(scale = TRUE)
+
+  return(list(tb = tb2, pca = pca))
+})
+  
+```
+
+```{r}
+shiny::renderUI({
+  tagList(
+    h3("Matriz de Correlación"),
+    p("Una matriz de correlación muestra la relación entre dos o más variables cuantitativas. 
+       Cada celda representa el coeficiente de correlación entre un par de variables, 
+       indicando la fuerza y dirección de la relación entre ellas."),
+    h4("Cómo Interpretar la Matriz:"),
+    p("1. ", strong("Valores de correlación:"), " Los colores de la matriz indican la fuerza y dirección de la relación entre variables:"),
+    tags$ul(
+      tags$li("Colores ", strong("azul oscuro"), " indican una correlación positiva fuerte (cerca de 1), donde ambas variables tienden a aumentar juntas, a medida que aumentan los nuevos casos, también lo hacen los huérfanos debido al SIDA."),
+      tags$li("Colores ", strong("rojo oscuro"), " indican una correlación negativa fuerte (cerca de -1), donde una variable aumenta mientras la otra disminuye."),
+      tags$li("Colores ", strong("claros"), " (blancos o pasteles) indican una correlación débil o nula (cercana a 0), sugiriendo una relación lineal insignificante entre las variables.")
+    ),
+    p("2. ", strong("Ejes:"), " Cada fila y columna corresponde a una variable específica. Cada celda muestra la correlación entre la variable de la fila y la variable de la columna."),
+    p("3. ", strong("Interpretación de pares:"), " Observa los cuadros de color fuerte para identificar relaciones destacadas."),
+    p("   - Un cuadro azul oscuro entre dos variables indica una alta correlación positiva entre ellas."),
+    p("   - Un cuadro rojo oscuro muestra una fuerte relación inversa, donde cuando una variable aumenta, la otra tiende a disminuir."),
+    p("Esta matriz ayuda a identificar relaciones fuertes entre variables, útil para comprender patrones y análisis predictivo.")
+  )
+})
+```
+
+Column
+--------------------------------------------
+###
+
+```{r} 
+highcharter::renderHighchart({
+  
+ tb2 <- inputs.processing2()[[1]] 
+  
+  tb2 %>%
+  column_to_rownames(var="country") %>% 
+  cor(use='complete.obs') %>%
+  hchart()
+})
+```
+
+PCA
+=======================================================================
+
+Column {.sidebar data-width=255}
+--------------------------------------------
+
+```{r}
+shiny::selectInput(
+  "year1", 
+  label = "YEAR", 
+  choices = c("Last", sort(unique(Atributos$Year[Atributos$Year < 2020 & Atributos$Year > 1999]))), 
+  selected = "Last"
+)
+
+shiny::numericInput(
+  "PCx",
+  label = "Componente eje x",
+  value = 1,
+  min = 1,
+  max = 10,
+  step = 1
+)
+
+shiny::numericInput(
+  "PCy",
+  label = "Componente eje y",
+  value = 2,
+  min = 1,
+  max = 10,
+  step = 1
+)
+```
+
+```{r}
+inputs.processing3 <- shiny::reactive({
+  tb3 <- Atributos %>%
+    rename(
+      country = "country",
+      Country.Code = "Country.Code",
+      Year = "Year",
+      poblacion = "poblacion",
+      `Esperanza de vida` = "Life.expectancy",
+      `Nuevos casos SIDA` = "new_cases",
+      `Huerfanos por SIDA` = "AIDS.Orphans",
+      `Grupo de ingresos` = "WorldBank.income.group",
+      `Muertes por VIH` = "Total_death",
+      `Gasto en sanidad` = "Health.expenditure",
+      `Infecciones evitadas PMTCT` = "infecciones_evitadas",
+      `Nuevas infecciones` = "nuevas_infecciones",
+      `Personas con Tar` = "TAR"
+    ) %>%
+    pivot_longer(
+      cols = c(`Esperanza de vida`, `Nuevos casos SIDA`, `Huerfanos por SIDA`, 
+               `Muertes por VIH`, `Gasto en sanidad`, `Personas con Tar`),
+      names_to = "atributos",
+      values_to = "value"
+    ) %>%
+    dplyr::select(Year, country, atributos, value) %>%
+    filter(!is.na(country))
+
+  if (input$year1 == "Last") {
+    tb3 <- tb3 %>%
+      group_by(country, atributos) %>%
+      summarise(value = last(na.omit(value)), .groups = "drop")
+  } else {
+    tb3 <- tb3 %>%
+      filter(Year == input$year1) %>%
+      dplyr::select(-Year)
+  }
+
+  tb3 <- tb3 %>%
+    pivot_wider(names_from = atributos, values_from = value)
+
+  pca_data <- tb3 %>%
+    column_to_rownames(var = "country") %>%
+    na.omit()
+
+  pca <- prcomp(pca_data, scale. = TRUE)
+
+  return(list(tb = tb3, pca = pca))
+})
+
+```
+
+Column {.tabset data-width=650}
+--------------------------------------------
+### Análisis de atributos 2D
+
+
+```{r} 
+highcharter::renderHighchart({
+ pca <- inputs.processing3()[[2]] 
+ 
+ hchart(pca,choices=c(input$PCx,input$PCy))
+})
+```
+
+
+### Porcentaje de varianza explicada por la componentes principales
+
+```{r}
+
+renderPlotly({
+  pca <- inputs.processing3()[[2]]
+ tibble(
+   label=fct_inorder(paste("PC",1:length(pca$sdev))),
+   varPercent = pca$sdev^2/sum(pca$sdev^2) * 100
+  ) %>%
+  ggplot(aes(x=label,y=varPercent)) +
+  geom_bar(stat = "identity") +
+  labs(x= "Componentes Principales",y= "Porcentaje varianza explicada") +
+  geom_text(aes(label=paste0(round(varPercent,digits = 1),"%")),size=3,colour = "blue",nudge_y = 1.) 
+
+})
+
+```
+
